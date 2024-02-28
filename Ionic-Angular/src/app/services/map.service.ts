@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { IActivity } from '../shared/activity.model';
-import {ActivityService} from '../services/activity.service';
-import { SAVED_ACTIVITIES } from '../shared/activities';}
+import { ActivityService } from '../services/activity.service';
+import { SAVED_ACTIVITIES } from '../shared/activities';
+import 'leaflet-omnivore'; // Import Leaflet Omnivore
 
 const apiToken = environment.MAPBOX_API_KEY;
 declare const omnivore: any;
 declare const L: any;
+
 const defaultCoords: number[] = [40, -80];
 const defaultZoom: number = 8;
 
@@ -17,12 +19,11 @@ export class MapService {
 
   constructor() { }
 
-  
-  getActivity(id: number){
+  getActivity(id: number) {
     return SAVED_ACTIVITIES.slice(0).find(run => run.id == id);
   }
 
-  plotActivity(id: number){
+  plotActivity(id: number) {
     var myStyle = {
       "color": "#3949AB",
       "weight": 5,
@@ -40,15 +41,19 @@ export class MapService {
       accessToken: apiToken
     }).addTo(map);
 
-    var customLayer = L.geoJson(null, {
-      style: myStyle
-    });
+    var activity = SAVED_ACTIVITIES.slice(0).find(run => run.id == id);
 
-    var gpxLayer = omnivore.gpx(SAVED_ACTIVITIES.slice(0).find(run => run.id == id).gpxData, null, customLayer)
-    .on('ready', function() {
-      map.fitBounds(gpxLayer.getBounds());
-    }).addTo(map);
+    if (activity) {
+      var customLayer = L.geoJson(null, {
+        style: myStyle
+      });
+
+      var gpxLayer = omnivore.gpx(activity.gpxData, null, customLayer)
+        .on('ready', function () {
+          map.fitBounds(gpxLayer.getBounds());
+        }).addTo(map);
+    } else {
+      console.error(`Activity with ID ${id} not found.`);
+    }
   }
-  
-  
 }

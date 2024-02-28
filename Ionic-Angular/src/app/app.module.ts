@@ -4,13 +4,38 @@ import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router'
+
+
+import { ActivityService } from './services/activity.service';
+import { MapService } from './services/map.service';
+import { appRoutes } from '../routes';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+
+  imports: [
+    BrowserModule,
+    FormsModule, 
+    IonicModule.forRoot(), 
+    AppRoutingModule,
+    RouterModule.forRoot(appRoutes)],
+
+    providers: [ 
+      { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+      HttpClientModule, 
+    ],
+
   bootstrap: [AppComponent],
 })
+
 export class AppModule {}
+
+
+  

@@ -5,15 +5,25 @@ import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
+import { MapComponent} from '../map/map.component';
+import { ActivityListComponent } from '../activity-list/activity-list.component';
 
+import { HttpClientModule } from '@angular/common/http';
+import { ActivityService } from '../services/activity.service';
+import { MapService } from '../services/map.service';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
   ],
-  declarations: [HomePage]
+  declarations: [HomePage, ActivityListComponent, MapComponent],
+  providers: [ 
+    HttpClientModule, 
+    ActivityService, 
+    MapService
+  ],
 })
 export class HomePageModule {}

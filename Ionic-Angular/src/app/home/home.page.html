@@ -13,8 +13,15 @@
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div class="container">
+    <nav id ="" class="navbar navbar-custom">
+      <a class="navbar-brand" [routerLink] ="['/']"><p class="logo">{{ title }}</p></a>
+    </nav>
+    <div class="container">
+      <a routerLink="/runs" routerLinkActive = "active" class = "item">Activity</a>
+        <router-outlet></router-outlet>
+      <!-- <app-activity-list></app-activity-list> -->
+      <!-- <app-map></app-map> -->
+    </div>
   </div>
 </ion-content>
