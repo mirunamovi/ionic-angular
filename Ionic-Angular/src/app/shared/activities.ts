@@ -15,6 +15,6 @@ export const SAVED_ACTIVITIES: IActivity[] = [
     "date": new Date('06/01/2023'),
     "distance": 10.2,
     "comments": "Good Day",
-    "gpxData": '../../assets/gpx/ter pred.gpx'
+    "gpxData": '../../assets/gpx/fells_loop.gpx'
   }
 ]
