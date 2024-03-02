@@ -7,7 +7,7 @@ export const SAVED_ACTIVITIES: IActivity[] = [
     "date": new Date('06/01/2022'),
     "distance": 10.2,
     "comments": "Nice Day",
-    "gpxData": '../../assets/gpx/oli2.gpx'
+    "gpxData": '../../assets/gpx/ter pred.gpx'
   },
   {
     "id": 2,

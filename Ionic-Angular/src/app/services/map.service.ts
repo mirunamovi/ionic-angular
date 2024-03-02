@@ -25,7 +25,7 @@ export class MapService {
 
   plotActivity(id: number) {
     var myStyle = {
-      "color": "#ab3939",
+      "color": "#8209d9",
       "weight": 5,
       "opacity": 0.95
     };
@@ -46,7 +46,7 @@ export class MapService {
     if (activity) {
       var customLayer = L.geoJson(null, {
         pointToLayer: function () {
-          return null; // Return null to skip rendering points
+          return null; 
         },
         style: myStyle
       });
