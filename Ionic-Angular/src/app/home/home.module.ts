@@ -11,6 +11,7 @@ import { ActivityListComponent } from '../activity-list/activity-list.component'
 import { HttpClientModule } from '@angular/common/http';
 import { ActivityService } from '../services/activity.service';
 import { MapService } from '../services/map.service';
+import { MapRecorderComponent } from '../map-recorder/map-recorder.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,7 @@ import { MapService } from '../services/map.service';
     IonicModule,
     HomePageRoutingModule,
   ],
-  declarations: [HomePage, ActivityListComponent, MapComponent],
+  declarations: [HomePage, ActivityListComponent, MapComponent, MapRecorderComponent],
   providers: [ 
     HttpClientModule, 
     ActivityService, 

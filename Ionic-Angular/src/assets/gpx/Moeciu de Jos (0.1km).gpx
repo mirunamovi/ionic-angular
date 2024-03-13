@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- track-length = 94 filtered ascend = 3 plain-ascend = 7 cost=10317 energy=0.0kwh time=6.4s -->
+<gpx 
+ xmlns="http://www.topografix.com/GPX/1/1" 
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" 
+ version="1.1" 
+ creator="BRouter-Web 0.18.1">
+
+ <rte>
+  <name>Curmatura</name>
+  <desc><![CDATA[Bike Loop Bellevue]]></desc>
+  <number>3</number>
+ <rtept lat="45.550115" lon="25.25496"><name>from</name><type>from</type></rtept>
+ <rtept lat="45.550219" lon="25.254949"><name>via1</name><type>via</type></rtept>
+ <rtept lat="45.550342" lon="25.254939"><name>via2</name><type>via</type></rtept>
+ <rtept lat="45.550435" lon="25.254925"><name>via3</name><type>via</type></rtept>
+ <rtept lat="45.550531" lon="25.254874"><name>via4</name><type>via</type></rtept>
+ <rtept lat="45.550619" lon="25.254823"><name>via5</name><type>via</type></rtept>
+ <rtept lat="45.550713" lon="25.254853"><name>via6</name><type>via</type></rtept>
+ <rtept lat="45.5508" lon="25.254888"><name>via7</name><type>via</type></rtept>
+ <rtept lat="45.550891" lon="25.254895"><name>via8</name><type>via</type></rtept>
+ <rtept lat="45.551036" lon="25.254854"><name>via9</name><type>via</type></rtept>
+ <rtept lat="45.551124" lon="25.254806"><name>via10</name><type>via</type></rtept>
+ <rtept lat="45.551229" lon="25.254747"><name>via11</name><type>via</type></rtept>
+ <rtept lat="45.551304" lon="25.254686"><name>via12</name><type>via</type></rtept>
+ <rtept lat="45.551424" lon="25.254637"><name>via13</name><type>via</type></rtept>
+ <rtept lat="45.551526" lon="25.254602"><name>via14</name><type>via</type></rtept>
+ <rtept lat="45.551621" lon="25.254529"><name>via15</name><type>via</type></rtept>
+ <rtept lat="45.551718" lon="25.254443"><name>via16</name><type>via</type></rtept>
+ <rtept lat="45.55179" lon="25.254341"><name>via17</name><type>via</type></rtept>
+ <rtept lat="45.55184" lon="25.254277"><name>via18</name><type>via</type></rtept>
+ <rtept lat="45.551949" lon="25.254226"><name>via19</name><type>via</type></rtept>
+ <rtept lat="45.552043" lon="25.25421"><name>via20</name><type>via</type></rtept>
+ <rtept lat="45.552133" lon="25.254207"><name>via21</name><type>via</type></rtept>
+ <rtept lat="45.552212" lon="25.25425"><name>via22</name><type>via</type></rtept>
+ <rtept lat="45.552263" lon="25.254392"><name>via23</name><type>via</type></rtept>
+ <rtept lat="45.552368" lon="25.254443"><name>via24</name><type>via</type></rtept>
+ <rtept lat="45.552542" lon="25.254406"><name>via25</name><type>via</type></rtept>
+ <rtept lat="45.552555" lon="25.254342"><name>via26</name><type>via</type></rtept>
+ <rtept lat="45.552572" lon="25.254216"><name>via27</name><type>via</type></rtept>
+ <rtept lat="45.552639" lon="25.254098"><name>via28</name><type>via</type></rtept>
+ <rtept lat="45.552728" lon="25.253862"><name>via29</name><type>via</type></rtept>
+ <rtept lat="45.552739" lon="25.253696"><name>via30</name><type>via</type></rtept>
+ <rtept lat="45.552756" lon="25.253575"><name>via31</name><type>via</type></rtept>
+ <rtept lat="45.552758" lon="25.253486"><name>via32</name><type>via</type></rtept>
+ <rtept lat="45.552775" lon="25.25335"><name>via33</name><type>via</type></rtept>
+ <rtept lat="45.552844" lon="25.253291"><name>via34</name><type>via</type></rtept>
+ <rtept lat="45.552889" lon="25.253208"><name>via35</name><type>via</type></rtept>
+ <rtept lat="45.552987" lon="25.253009"><name>via36</name><type>via</type></rtept>
+ <rtept lat="45.553069" lon="25.252843"><name>via37</name><type>via</type></rtept>
+ <rtept lat="45.553055" lon="25.252696"><name>via38</name><type>via</type></rtept>
+ <rtept lat="45.55307" lon="25.252567"><name>via39</name><type>via</type></rtept>
+ <rtept lat="45.553124" lon="25.252496"><name>via40</name><type>via</type></rtept>
+ <rtept lat="45.553165" lon="25.252405"><name>via41</name><type>via</type></rtept>
+ <rtept lat="45.553201" lon="25.252348"><name>via42</name><type>via</type></rtept>
+ <rtept lat="45.55321" lon="25.25222"><name>via43</name><type>via</type></rtept>
+ <rtept lat="45.553257" lon="25.252019"><name>via44</name><type>via</type></rtept>
+ <rtept lat="45.553248" lon="25.251903"><name>via45</name><type>via</type></rtept>
+ <rtept lat="45.553231" lon="25.251734"><name>via46</name><type>via</type></rtept>
+ <rtept lat="45.553226" lon="25.251638"><name>via47</name><type>via</type></rtept>
+ <rtept lat="45.553259" lon="25.251566"><name>via48</name><type>via</type></rtept>
+ <rtept lat="45.553296" lon="25.251435"><name>via49</name><type>via</type></rtept>
+ <rtept lat="45.553263" lon="25.251159"><name>via50</name><type>via</type></rtept>
+ <rtept lat="45.553297" lon="25.250982"><name>via51</name><type>via</type></rtept>
+ <rtept lat="45.553383" lon="25.250773"><name>via52</name><type>via</type></rtept>
+ <rtept lat="45.553383" lon="25.250665"><name>via53</name><type>via</type></rtept>
+ <rtept lat="45.553368" lon="25.250574"><name>via54</name><type>via</type></rtept>
+ <rtept lat="45.5535" lon="25.250483"><name>via55</name><type>via</type></rtept>
+ <rtept lat="45.553507" lon="25.250365"><name>via56</name><type>via</type></rtept>
+ <rtept lat="45.55347" lon="25.250285"><name>via57</name><type>via</type></rtept>
+ <rtept lat="45.553361" lon="25.250022"><name>via58</name><type>via</type></rtept>
+ <rtept lat="45.553229" lon="25.249721"><name>via59</name><type>via</type></rtept>
+ <rtept lat="45.553053" lon="25.249325"><name>via60</name><type>via</type></rtept>
+ <rtept lat="45.553046" lon="25.249078"><name>via61</name><type>via</type></rtept>
+ <rtept lat="45.553008" lon="25.248778"><name>via62</name><type>via</type></rtept>
+ <rtept lat="45.55305" lon="25.248622"><name>via63</name><type>via</type></rtept>
+ <rtept lat="45.552967" lon="25.248499"><name>via64</name><type>via</type></rtept>
+ <rtept lat="45.552993" lon="25.248354"><name>via65</name><type>via</type></rtept>
+ <rtept lat="45.552941" lon="25.248209"><name>via66</name><type>via</type></rtept>
+ <rtept lat="45.5529" lon="25.248102"><name>via67</name><type>via</type></rtept>
+ <rtept lat="45.552952" lon="25.247909"><name>via68</name><type>via</type></rtept>
+ <rtept lat="45.552933" lon="25.247791"><name>via69</name><type>via</type></rtept>
+ <rtept lat="45.55293" lon="25.247576"><name>via70</name><type>via</type></rtept>
+ <rtept lat="45.552896" lon="25.247383"><name>via71</name><type>via</type></rtept>
+ <rtept lat="45.552817" lon="25.247228"><name>via72</name><type>via</type></rtept>
+ <rtept lat="45.552731" lon="25.246997"><name>via73</name><type>via</type></rtept>
+ <rtept lat="45.552603" lon="25.246686"><name>via74</name><type>via</type></rtept>
+ <rtept lat="45.552628" lon="25.246556"><name>via75</name><type>via</type></rtept>
+ <rtept lat="45.552444" lon="25.246245"><name>via76</name><type>via</type></rtept>
+ <rtept lat="45.552459" lon="25.246122"><name>via77</name><type>via</type></rtept>
+ <rtept lat="45.552339" lon="25.245613"><name>via78</name><type>via</type></rtept>
+ <rtept lat="45.5522" lon="25.245457"><name>via79</name><type>via</type></rtept>
+ <rtept lat="45.552083" lon="25.245108"><name>via80</name><type>via</type></rtept>
+ <rtept lat="45.552188" lon="25.244824"><name>via81</name><type>via</type></rtept>
+ <rtept lat="45.552188" lon="25.244679"><name>via82</name><type>via</type></rtept>
+ <rtept lat="45.552444" lon="25.24432"><name>via83</name><type>via</type></rtept>
+ <rtept lat="45.552511" lon="25.244073"><name>via84</name><type>via</type></rtept>
+ <rtept lat="45.552635" lon="25.244149"><name>via85</name><type>via</type></rtept>
+ <rtept lat="45.553026" lon="25.244787"><name>via86</name><type>via</type></rtept>
+ <rtept lat="45.553317" lon="25.244902"><name>via87</name><type>via</type></rtept>
+
+
+
+</rte>
+</gpx>

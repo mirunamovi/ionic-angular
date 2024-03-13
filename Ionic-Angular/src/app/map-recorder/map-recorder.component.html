@@ -1,0 +1,8 @@
+<div class="container">
+  <div id="map" style="height: 400px;"></div>
+
+  <button (click)="startRecording()" *ngIf="!recording">Start Recording</button>
+  <button (click)="stopRecording()" *ngIf="recording">Stop Recording</button>
+  <button (click)="saveGPX()" *ngIf="recordedData.length > 0">Save GPX</button>
+</div>
+

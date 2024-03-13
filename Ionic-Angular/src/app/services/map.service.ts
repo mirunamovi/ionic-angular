@@ -5,7 +5,6 @@ import { ActivityService } from '../services/activity.service';
 import { SAVED_ACTIVITIES } from '../shared/activities';
 import 'leaflet-omnivore'; 
 
-const apiToken = environment.MAPBOX_API_KEY;
 declare const omnivore: any;
 declare const L: any;
 

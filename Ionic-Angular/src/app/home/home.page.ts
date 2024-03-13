@@ -9,5 +9,6 @@ export class HomePage {
 
   title = 'Run Journal';
   constructor() {}
+  
 
 }
