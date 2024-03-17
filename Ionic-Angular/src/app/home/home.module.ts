@@ -13,16 +13,18 @@ import { ActivityService } from '../services/activity.service';
 import { MapService } from '../services/map.service';
 import { MapRecorderComponent } from '../map-recorder/map-recorder.component';
 
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
+    HttpClientModule
+
   ],
   declarations: [HomePage, ActivityListComponent, MapComponent, MapRecorderComponent],
   providers: [ 
-    HttpClientModule, 
     ActivityService, 
     MapService
   ],

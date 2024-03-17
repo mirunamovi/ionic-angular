@@ -1,5 +1,5 @@
 export interface IActivity {
-  id: number
+  id: string
   name: string
   date: Date
   comments?: string

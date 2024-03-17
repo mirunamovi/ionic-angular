@@ -8,9 +8,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router'
 
-
-import { ActivityService } from './services/activity.service';
-import { MapService } from './services/map.service';
 import { appRoutes } from '../routes';
 
 import { AppComponent } from './app.component';
