@@ -10,6 +10,7 @@ declare const L: any;
 const defaultCoords: number[] = [40, 80];
 const defaultZoom: number = 8;
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +19,9 @@ export class MapService {
   constructor() { }
 
   getActivity(id: number) {
-    return SAVED_ACTIVITIES.slice(0).find(run => run.id);
+    console.log(id);    
+    console.log(SAVED_ACTIVITIES.slice(0).find(activity => activity.id == id));
+    return SAVED_ACTIVITIES.slice(0).find(run => run.id == id);
   }
 
   // getMap(){
@@ -48,7 +51,7 @@ export class MapService {
       maxZoom: 18
     }).addTo(map);
 
-    var activity = SAVED_ACTIVITIES.slice(0).find(run => run.id);
+    var activity = SAVED_ACTIVITIES.slice(0).find(run => run.id == id);
 
     if (activity) {
       var customLayer = L.geoJson(null, {
@@ -62,6 +65,7 @@ export class MapService {
         .on('ready', function () {
           map.fitBounds(gpxLayer.getBounds());
         }).addTo(map);
+        console.log(activity.gpxData);
     } else {
       console.error(`Activity with ID ${id} not found.`);
     }
@@ -71,7 +75,7 @@ export class MapService {
     const gpxData = `../../assets/gpx/${fileName}.gpx`; // Assuming the GPX file is stored in the assets/gpx folder
     
     const track: IActivity = {
-      id: uuidv4(),
+      id: 3,
       name: fileName,
       date: new Date('12/03/2024'),
       gpxData: gpxData // Store the path to the GPX file in the gpxData property
