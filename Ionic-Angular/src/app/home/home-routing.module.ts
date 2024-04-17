@@ -9,12 +9,11 @@
     {
       path: '',
       component: HomePage,
+      pathMatch: 'full'
     },
-    { path: "record", component: MapRecorderComponent },
-    { path: "runs", component: ActivityListComponent },
-    { path: "run/:id", component: MapComponent },
-    { path: "", redirectTo: "runs", pathMatch: 'full' }
-    
+    { path: 'record', component: MapRecorderComponent },
+    { path: 'runs', component: ActivityListComponent },
+    { path: 'run/:id', component: MapComponent },    
  ];
 
  @NgModule({

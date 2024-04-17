@@ -2,8 +2,9 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../auth/auth.service';
 import { catchError, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,7 @@ export class LoginPage implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -36,6 +38,7 @@ export class LoginPage implements OnInit {
           tap((response: any) => {
             localStorage.setItem('token', response.access_token);
             // Redirect or perform any other action after successful login
+            this.router.navigate(['/home']);
           }),
           catchError(error => {
             console.error('Login failed', error);
@@ -46,7 +49,6 @@ export class LoginPage implements OnInit {
         .subscribe();
     }
   }
-
 
 
 

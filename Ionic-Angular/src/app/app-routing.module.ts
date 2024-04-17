@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { ActivityListComponent } from './activity-list/activity-list.component';
 import { MapComponent } from './map/map.component';
-import { AuthGuardService } from './services/auth-guard.service';
+import { AuthGuardService } from './auth/auth-guard.service';
 
 const routes: Routes = [
    {

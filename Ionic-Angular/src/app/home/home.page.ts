@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -6,9 +8,13 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.css'],
 })
 export class HomePage {
+  userName: any;
 
-  title = 'Run Journal';
-  constructor() {}
-  
-
+  constructor(private http: HttpClient) { }
+  ngOnInit() {
+    // Make HTTP request to fetch user information
+    this.userName = this.http.get<any>('http://localhost:4000/user').pipe(
+      map((response: any) => response.name.value)
+    );
+  }
 }

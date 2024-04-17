@@ -7,9 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { LoginPageRoutingModule } from './login-routing.module';
 
 import { LoginPage } from './login.page';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/auth/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
-import { AuthInterceptor } from 'src/app/services/auth.interceptor';
+import { AuthInterceptor } from 'src/app/auth/auth.interceptor';
 
 @NgModule({
   imports: [
