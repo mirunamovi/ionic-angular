@@ -1,24 +1,25 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      PeakGeek
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <!-- <ion-header collapse="condense">
     <ion-toolbar>
-      <!-- <ion-title size="large">Hi! {{ userName }}</ion-title> -->
-      <!-- <a routerLink="/logout" routerLinkActive = "active" class = "item"><p>Logout</p></a>  -->
+      <ion-title size="large">Hi! {{ userName }}</ion-title>
+      <a routerLink="/logout" routerLinkActive = "active" class = "item"><p>Logout</p></a> 
 
     </ion-toolbar>
-  </ion-header>
+  </ion-header> -->
 
   <div class="container">
     <nav id ="" class="navbar navbar-custom">
-      <a routerLink="/runs" routerLinkActive = "active" class = "item"><p>Activity</p></a> 
-      <a routerLink="/record" routerLinkActive = "active" class = "item"><p>Record</p></a> 
+      
+      <a routerLink="runs" class = "item"><p>Activity</p></a> 
+      <a routerLink="record" class = "item"><p>Record</p></a> 
     </nav>
     <div class="container">
         <router-outlet></router-outlet>

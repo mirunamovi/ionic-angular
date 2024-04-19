@@ -2,7 +2,7 @@ import { Component, AfterViewInit, OnInit } from '@angular/core';
 // import * as L from 'leaflet';
 import 'leaflet-omnivore'; 
 import { AlertController } from '@ionic/angular';
-import { MapService } from '../services/map.service';
+import { MapService } from '../activity-list/services/map.service';
 import { HttpClient } from '@angular/common/http';
 
 

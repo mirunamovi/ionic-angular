@@ -5,15 +5,12 @@ import { MapComponent } from './map/map.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 
 const routes: Routes = [
-   {
+
+  {
     path: '',
     redirectTo: '/login',
     pathMatch: 'full'
   },
-  // {
-  //   path: '',
-  //   loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
-  // },
   {
     path: 'login',
     loadChildren: () => import('./account/login/login.module').then( m => m.LoginPageModule)
@@ -24,19 +21,55 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
   },
 
+  //  {
+  //   path: '',
+  //   redirectTo: '/login',
+  //   pathMatch: 'full'
+  // },
   // {
   //   path: 'login',
   //   loadChildren: () => import('./account/login/login.module').then( m => m.LoginPageModule)
   // },
   // {
-  //   path: 'register',
-  //   loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+  //   path: 'home',
+  //   canActivate: [AuthGuardService],
+  //   loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
+  //   children: [
+
+  //     { 
+  //       path: 'record', 
+  //       loadChildren: () =>
+  //       import('src/app/map-recorder/map-recorder.module').then(
+  //         (m) => m.MapRecorderModule
+  //       ),
+  //     },
+  //     { 
+  //       path: 'runs', 
+  //       loadChildren: () =>
+  //       import('src/app/activity-list/activity-list.module').then(
+  //         (m) => m.ActivityListModule
+          
+  //       ),
+  //       children:[
+  //         { 
+  //           path: 'run/:id', 
+  //         //   loadChildren: () =>
+  //         //   import('src/app/map/map.component').then(
+  //         //   (m) => m.MapComponent
+  //         // ),
+  //         component: MapComponent
+  //        },    
+  //       ]
+
+  //     },
+  //   ],
   // },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes)
   ],
   exports: [RouterModule]
 })

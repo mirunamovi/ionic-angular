@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { SAVED_ACTIVITIES } from '../shared/activities';
+import { SAVED_ACTIVITIES } from '../../shared/activities';
 import 'leaflet-omnivore'; 
 import {v4 as uuidv4} from 'uuid';
-import { IActivity } from '../shared/activity.model';
+import { IActivity } from '../../shared/activity.model';
 
 declare const omnivore: any;
 declare const L: any;

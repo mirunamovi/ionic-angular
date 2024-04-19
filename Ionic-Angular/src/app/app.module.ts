@@ -12,6 +12,8 @@ import { appRoutes } from '../routes';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginPage } from './account/login/login.page';
+import { HomePage } from './home/home.page';
 
 
 @NgModule({
@@ -24,8 +26,8 @@ import { HttpClientModule } from '@angular/common/http';
 
     IonicModule.forRoot(), 
     AppRoutingModule,
-    RouterModule.forRoot(appRoutes)],
-
+    // RouterModule.forRoot(appRoutes)],
+  ],
     providers: [ 
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
       HttpClientModule, 

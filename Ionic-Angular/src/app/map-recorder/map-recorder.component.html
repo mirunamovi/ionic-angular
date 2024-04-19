@@ -1,9 +1,27 @@
-<div class="container">
-  <div id="map"></div>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Map</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-  <button (click)="startRecording()" *ngIf="!recording && !pause">Start Recording</button>
-  <button (click)="pauseRecording()" *ngIf="recording && !pause">Pause Recording</button>
-  <button (click)="resumeRecording()" *ngIf="!recording && pause">Resume Recording</button>
-  <button (click)="saveGPX()" *ngIf="recordedData.length > 0">Save GPX</button>
-</div>
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <div id="map"></div>
 
+    <button (click)="startRecording()" *ngIf="!recording && !pause">
+      Start Recording
+    </button>
+    <button (click)="pauseRecording()" *ngIf="recording && !pause">
+      Pause Recording
+    </button>
+    <button (click)="resumeRecording()" *ngIf="!recording && pause">
+      Resume Recording
+    </button>
+    <button (click)="saveGPX()" *ngIf="recordedData.length > 0">
+      Save GPX
+    </button>
+  </div>
+</ion-content>

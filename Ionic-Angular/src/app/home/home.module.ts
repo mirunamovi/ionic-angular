@@ -9,8 +9,8 @@ import { MapComponent} from '../map/map.component';
 import { ActivityListComponent } from '../activity-list/activity-list.component';
 
 import { HttpClientModule } from '@angular/common/http';
-import { ActivityService } from '../services/activity.service';
-import { MapService } from '../services/map.service';
+import { ActivityService } from '../activity-list/services/activity.service';
+import { MapService } from '../activity-list/services/map.service';
 import { MapRecorderComponent } from '../map-recorder/map-recorder.component';
 
 
@@ -23,10 +23,13 @@ import { MapRecorderComponent } from '../map-recorder/map-recorder.component';
     HttpClientModule
 
   ],
-  declarations: [HomePage, ActivityListComponent, MapComponent, MapRecorderComponent],
-  providers: [ 
-    ActivityService, 
-    MapService
+  declarations: 
+  [ HomePage,
+    MapRecorderComponent
+    // ActivityListComponent
+    // ActivityService,
+    // MapService,
+    // MapRecorderComponent
   ],
 })
 export class HomePageModule {}
