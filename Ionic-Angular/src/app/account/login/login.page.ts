@@ -15,6 +15,8 @@ export class LoginPage implements OnInit {
 
   screen: any = 'signin';
 
+  error: string = '';
+
   loginFormGroup: FormGroup = new FormGroup({
     username: new FormControl("", [Validators.required]),
     password: new FormControl("", [Validators.required])
@@ -30,6 +32,7 @@ export class LoginPage implements OnInit {
 
   login() {
     if (this.loginFormGroup.valid) {
+      this.error = 'Login Successfully';
       const email = this.loginFormGroup.get('username')!.value;
       const password = this.loginFormGroup.get('password')!.value;
 
@@ -43,6 +46,7 @@ export class LoginPage implements OnInit {
           catchError(error => {
             console.error('Login failed', error);
             // Handle login error
+            this.error = 'User or Password not valid.';
             throw error; // Re-throw the error to propagate it further
           })
         )

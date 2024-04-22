@@ -5,8 +5,13 @@ const config: CapacitorConfig = {
   appName: 'Ionic-Angular',
   webDir: 'www',
   server: {
-    androidScheme: 'https'
-  }
+    androidScheme: 'http',
+    // url: "http://localhost",
+    // url: "http://192.168.0.104:8101",
+
+    cleartext: true,
+    
+  },
 };
 
 export default config;

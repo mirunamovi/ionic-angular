@@ -15,7 +15,7 @@ import { IonicModule } from '@ionic/angular';
     IonicModule,
     ActivityListRoutingModule
   ],
-  declarations: [ActivityListComponent],
+  declarations: [ActivityListComponent, MapComponent],
   providers: [ 
     ActivityService, 
     MapService

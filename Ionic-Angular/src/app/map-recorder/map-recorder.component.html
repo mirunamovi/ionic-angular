@@ -7,9 +7,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div class="container">
+<ion-content [fullscreen]="true" scroll-y="true">
+  <div class="col-md-7">
     <div id="map"></div>
+  </div>
+  <div class="col-md-3 info-container">
 
     <button (click)="startRecording()" *ngIf="!recording && !pause">
       Start Recording

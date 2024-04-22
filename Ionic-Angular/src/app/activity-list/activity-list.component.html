@@ -32,7 +32,7 @@
       <tbody>
         <tr *ngFor="let activity of activities">
           <td>
-            <a [routerLink] ="['/run', activity.id]">
+            <a [routerLink] ="['run', activity.id]">
               {{ activity.name }}
             </a>
           </td>

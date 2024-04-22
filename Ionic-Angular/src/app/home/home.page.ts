@@ -13,7 +13,7 @@ export class HomePage {
   constructor(private http: HttpClient) { }
   ngOnInit() {
     // Make HTTP request to fetch user information
-    this.userName = this.http.get<any>('http://localhost:4000/user').pipe(
+    this.userName = this.http.get<any>('http://192.168.0.104:4000/user').pipe(
       map((response: any) => response.name.value)
     );
   }

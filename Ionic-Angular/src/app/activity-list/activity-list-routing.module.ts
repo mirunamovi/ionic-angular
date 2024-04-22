@@ -8,19 +8,17 @@ const routes: Routes = [
   {
     path: '',
     component: ActivityListComponent,
-    children:[
-            { 
-              path: 'run/:id', 
+  },
+
+    { 
+      path: 'run/:id', 
             //   loadChildren: () =>
             //   import('src/app/map/map.component').then(
             //   (m) => m.MapComponent
             // ),
-            component: MapComponent
-           },    
-          ]
-
-  }
-]
+      component: MapComponent
+    },    
+  ]
 
 @NgModule({
   imports: [
