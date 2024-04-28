@@ -17,7 +17,10 @@ const routes: Routes = [
 
   {
     path: 'record',
-    component: MapRecorderComponent,
+    loadChildren: () =>
+      import('src/app/map-recorder/map-recorder.module').then(
+        (m) => m.MapRecorderModule
+      ),
   },
   {
     path: 'runs',

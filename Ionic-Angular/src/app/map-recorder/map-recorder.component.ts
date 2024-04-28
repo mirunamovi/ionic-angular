@@ -217,7 +217,7 @@ async getLocation() {
                     this.fileName = data.fileName.trim();
                       const title = this.fileName;
 
-                    console.log(this.mapRecorderService.createTracks({title}));
+                    this.mapRecorderService.createTracks({title}).subscribe();
                     
                     console.log(title);
                     if (this.fileName !== '') {

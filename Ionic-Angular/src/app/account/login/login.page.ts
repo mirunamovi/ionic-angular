@@ -32,16 +32,23 @@ export class LoginPage implements OnInit {
 
   login() {
     if (this.loginFormGroup.valid) {
-      this.error = 'Login Successfully';
+      
       const email = this.loginFormGroup.get('username')!.value;
       const password = this.loginFormGroup.get('password')!.value;
 
       this.authService.login({ email, password })
         .pipe(
-          tap((response: any) => {
-            localStorage.setItem('token', response.access_token);
-            // Redirect or perform any other action after successful login
-            this.router.navigate(['/home']);
+          tap((response) => {
+            localStorage.setItem('token', response.accessToken);
+            console.log(response);
+            if(response.accessToken != null){
+              this.error = 'Login Successfully';
+              this.router.navigate(['/home']);
+            }
+            else {
+              this.error = 'User or Password not valid.';
+            }
+            
           }),
           catchError(error => {
             console.error('Login failed', error);
