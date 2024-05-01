@@ -155,7 +155,8 @@ async getLocation() {
     this.recording = false;
     this.pause = false;
     this.map.stopLocate();
-    // const title = this.fileName;
+    const title = this.fileName;
+    this.mapRecorderService.createTracks({title}).subscribe();
     this.recordedData = []; // Clear existing data
 
     // const blob = new Blob([gpxData], { type: 'text/xml' });
@@ -212,14 +213,8 @@ async getLocation() {
             {
                 text: 'Start Recording',
                 handler: (data) => {
-                  // this.mapRecorderService.createTracks();
                     // Handler function to execute when the "Start Recording" button is clicked
                     this.fileName = data.fileName.trim();
-                      const title = this.fileName;
-
-                    this.mapRecorderService.createTracks({title}).subscribe();
-                    
-                    console.log(title);
                     if (this.fileName !== '') {
                         // Proceed with recording
                         this.recording = true;

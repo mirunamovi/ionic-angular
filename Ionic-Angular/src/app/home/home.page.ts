@@ -16,7 +16,11 @@ export class HomePage {
     // this.userName = this.http.get<any>('http://localhost:4000/user').pipe(
     //   map((response: any) => response.name.value)
     // );
-    this.userName = this.http.get<any>('http://192.168.0.104:4000/user').pipe(
+    // this.userName = this.http.get<any>('http://192.168.0.104:4000/user').pipe(
+    //   map((response: any) => response.name.value)
+    // );
+
+    this.userName = this.http.get<any>('http://192.168.173.213:4000/user').pipe(
       map((response: any) => response.name.value)
     );
   }

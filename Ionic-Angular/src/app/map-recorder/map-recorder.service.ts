@@ -8,14 +8,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class MapRecorderService {
-  private apiUrl = 'http://192.168.0.104:4000'; // Replace with your backend API URL
+  // private apiUrl = 'http://192.168.0.104:4000'; // Replace with your backend API URL
     // private apiUrl = 'http://localhost:4000'; // Replace with your backend API URL
+    private apiUrl = 'http://192.168.173.213:4000'; // Replace with your backend API URL
 
 
   constructor(private http: HttpClient) { }
 
   createTracks(payload:TrackInterface): Observable<any>{
-
     return this.http.post(`${this.apiUrl}/tracks`, payload)
     .pipe(
       tap((response: any) => {
@@ -28,6 +28,4 @@ export class MapRecorderService {
     
     );
   }
-
- 
 }

@@ -16,7 +16,7 @@ import { AuthInterceptor } from 'src/app/auth/auth.interceptor';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule,
+    // HttpClientModule,
     IonicModule,
     RouterModule,
     LoginPageRoutingModule

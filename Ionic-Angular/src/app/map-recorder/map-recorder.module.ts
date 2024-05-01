@@ -18,7 +18,7 @@ import { MapRecorderRoutingModule } from './map-recorder-routing.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    HttpClientModule,
+    // HttpClientModule,
     MapRecorderRoutingModule
 
   ],

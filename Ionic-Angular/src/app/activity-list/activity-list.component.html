@@ -43,5 +43,31 @@
       </tbody>
     </table>
   </div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Date</th>
+        <!-- <th>Comments</th>
+        <th>Date</th>
+        <th>Distance</th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let run of runs">
+        <td>
+          <!-- <a [routerLink] ="['run', activity.id]">
+            {{ activity.name }}
+          </a> -->
+          <a>
+            {{ run.title }}
+          </a>
+        </td>
+        <td>{{ run.createdAt | date:"yyyy-MM-dd"}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+
 </ion-content>
 

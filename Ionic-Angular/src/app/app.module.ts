@@ -11,9 +11,10 @@ import { appRoutes } from '../routes';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoginPage } from './account/login/login.page';
 import { HomePage } from './home/home.page';
+import { AuthInterceptor } from './auth/auth.interceptor';
 
 
 @NgModule({
@@ -22,18 +23,22 @@ import { HomePage } from './home/home.page';
   imports: [
     BrowserModule,
     FormsModule, 
-    HttpClientModule,
-
     IonicModule.forRoot(), 
     AppRoutingModule,
+    HttpClientModule,
+
     // RouterModule.forRoot(appRoutes)],
   ],
     providers: [ 
+      { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-      HttpClientModule, 
+      // HttpClientModule, 
 
     ],
-
+  //   exports: [
+  //  ,
+  //  HttpClientModule, 
+  //   ]
   bootstrap: [AppComponent],
 })
 

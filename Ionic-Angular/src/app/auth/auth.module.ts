@@ -12,7 +12,7 @@ import { REFRESH_TOKEN_PROVIDER } from './interceptors/refresh-token.interceptor
   declarations: [],
   imports: [
     CommonModule, 
-    HttpClientModule,
+    // HttpClientModule,
   ],
   providers: [
     // BASE_URL_PROVIDER,
