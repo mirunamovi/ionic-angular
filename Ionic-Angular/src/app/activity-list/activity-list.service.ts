@@ -9,8 +9,7 @@ import { IRun } from '../shared/run.model';
 })
 export class ActivityListService {
 
-  // private apiUrl = 'http://192.168.0.104:4000'; // Replace with your backend API URL
-  private apiUrl = 'http://192.168.173.213:4000'; // Replace with your backend API URL
+  private apiUrl = 'http://192.168.0.105:4000'; // Replace with your backend API URL
   constructor(private http: HttpClient) { }
 
   getTracks(): Observable<any>{

@@ -3,17 +3,24 @@ import { Observable, catchError, from, map, switchMap, tap, throwError } from 'r
 import { CredentialsInterface } from '../ts/interfaces';
 import { TrackInterface } from '../ts/interfaces/track';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  BackgroundGeolocationPlugin,
+  ConfigureOptions,
+  Location,
+} from "cordova-background-geolocation-plugin";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapRecorderService {
-  // private apiUrl = 'http://192.168.0.104:4000'; // Replace with your backend API URL
+  private apiUrl = 'http://192.168.0.105:4000'; // Replace with your backend API URL
     // private apiUrl = 'http://localhost:4000'; // Replace with your backend API URL
-    private apiUrl = 'http://192.168.173.213:4000'; // Replace with your backend API URL
+    
 
 
   constructor(private http: HttpClient) { }
+
+  declare BackgroundGeolocation: BackgroundGeolocationPlugin;
 
   createTracks(payload:TrackInterface): Observable<any>{
     return this.http.post(`${this.apiUrl}/tracks`, payload)

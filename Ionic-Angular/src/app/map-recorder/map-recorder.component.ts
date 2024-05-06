@@ -1,14 +1,14 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 // import * as L from 'leaflet';
-import 'leaflet-omnivore'; 
+import 'leaflet-omnivore';
 import { AlertController } from '@ionic/angular';
 import { MapService } from '../activity-list/services/map.service';
 import { HttpClient } from '@angular/common/http';
 import { MapRecorderService } from './map-recorder.service';
 // import { Geolocation } from '@ionic-native/geolocation/ngx';
 // import { IonicSlides, Platform } from '@ionic/angular';
-import { Geolocation } from '@capacitor/geolocation';
-
+import { Geolocation, GeolocationOptions, Position } from '@capacitor/geolocation';
+import { File } from '@ionic-native/file/ngx';
 
 declare const L: any;
 
@@ -17,8 +17,7 @@ declare const L: any;
   templateUrl: './map-recorder.component.html',
   styleUrls: ['./map-recorder.component.css'],
 })
-export class MapRecorderComponent implements OnInit {
-
+export class MapRecorderComponent implements OnInit, OnDestroy{
   map: any;
   polyline: any;
   marker: any;
@@ -30,89 +29,68 @@ export class MapRecorderComponent implements OnInit {
   longitude?: number;
   altitude?: number | null;
 
-  constructor(private alertController: AlertController, private http: HttpClient, private mapRecorderService: MapRecorderService) {}
+  private destroyed = false;
+  private watchId: string | undefined;
+
+  constructor(
+    private alertController: AlertController,
+    private http: HttpClient,
+    private mapRecorderService: MapRecorderService,
+    private file: File
+  ) {}
 
   ngOnInit(): void {
 
-      // this.map = L.map('map').fitWorld();
-      // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      //   attribution: 'contributor',
-      //   maxZoom: 30
-      // }).addTo(this.map);
-
-      // this.geolocation.getCurrentPosition().then((resp: { coords: { latitude: any; longitude: any; }; }) => {
-      //     console.log('Platform is android/ios')
-      //     this.setMarkertWithAnimation(resp.coords.latitude, resp.coords.longitude)  
-      //   }).catch((error) => {
-      //     console.log('Error getting location', error);
-      //   });
-    
-      this.initMap();
-      this.initMapRecorder();
-      this.getLocation();
-
+    this.initMap();
+    this.initMapRecorder();
+    this.getLocation();
   }
-  
 
-//   setMarkertWithAnimation(lat: any, lng: any) {
-//      {
-//       this.marker = L.marker([lat, lng]).on('click', () => {
-//         console.log('marker clicked');
-         
-//       });
-//       this.map.addLayer(this.marker);
-//       this.map.setView({lat, lng}, this.map.getZoom() ,{
-//         "animate": true,
-//         "pan": {
-//           "duration": 4
-//         }
-//       })
-//       this.http.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`).subscribe((data: any) => {
-//         console.log('Address Data',data)
+  ngOnDestroy() {
+    this.destroyed = true;
+    if (this.watchId) {
+      Geolocation.clearWatch({ id: this.watchId });
+    }
+  }
 
-//       })
-//     }
-//     setTimeout(() => 
-//     { this.map.invalidateSize()}, 500 );
 
-//   }
+  async getLocation() {
+    const options: PositionOptions = { timeout: 5000, enableHighAccuracy: true };
+    Geolocation.watchPosition(options, (position: Position | null, error?: GeolocationPositionError) => {
+      if (!this.destroyed && !error && position !== null) {
+          this.latitude = position.coords.latitude,
+          this.longitude = position.coords.longitude,
+          this.altitude = position.coords.altitude,
+          console.log('New location received:', position.coords.latitude, position.coords.longitude);
 
-//   setGeoLocation(position: { coords: { latitude: any; longitude: any } }) {
-//     const {
-//        coords: { latitude, longitude },
-//     } = position;
- 
-//     const  map = L.map('map').setView([latitude, longitude], 3);
- 
-//     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>contributors'
-//      } ).addTo(map);
-//  }
-async getLocation() {
-  const position = await Geolocation.getCurrentPosition();
-  this.latitude = position.coords.latitude;
-  this.longitude = position.coords.longitude;
-  this.altitude = position.coords.altitude;
+        };
+      }).then(watchId => {
+        this.watchId = watchId;
+      }).catch(error => {
+        console.error('Error starting geolocation watch:', error);
+      });
+    }
 
-}
 
   initMap(): void {
     this.map = L.map('map', {
-      center: [43.00, -79.00],
-      zoom: 15
+      center: [43.0, -79.0],
+      zoom: 15,
     }).fitWorld();
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
+      attribution: '© OpenStreetMap contributors',
     }).addTo(this.map);
 
-    setTimeout( () => { this.map.invalidateSize() }, 800);
+    setTimeout(() => {
+      this.map.invalidateSize();
+    }, 800);
 
     this.map.locate({
       watch: true, // Continuously update the user's location
       setView: true, // Set the map view to the user's location
       maxZoom: 16, // Maximum zoom level
-      enableHighAccuracy: true // Use high accuracy mode if available
+      enableHighAccuracy: true, // Use high accuracy mode if available
     });
   }
 
@@ -121,7 +99,6 @@ async getLocation() {
     this.marker = L.marker([0, 0], { icon: this.customIcon }).addTo(this.map);
 
     this.map.on('locationfound', (e: any) => this.onLocationFound(e));
-
   }
 
   private customIcon = L.icon({
@@ -130,8 +107,6 @@ async getLocation() {
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
   });
-
-  
 
   private onLocationFound(e: any): void {
     const currentLocation = [e.latitude, e.longitude];
@@ -144,52 +119,70 @@ async getLocation() {
 
     // Add the location data to the recordedData array if recording is active
     if (this.recording) {
-      this.recordedData.push({ lat: e.latitude, lon: e.longitude, time: new Date().toISOString() });
+      this.recordedData.push({
+        lat: e.latitude,
+        lon: e.longitude,
+        time: new Date().toISOString(),
+      });
     }
     L.circle(e.latitude, e.longitude).addTo(this.map);
   }
 
-  // Save recorded data to a GPX file
-  saveGPX(): void {
+  saveGPX() {
+    const folderName = 'PeakGeek';
+    const title = this.fileName;
+
     const gpxData = this.generateGPX(this.recordedData);
+    const filePath = this.file.externalDataDirectory + folderName + '/'; // Add folder name to the path
+
+    this.file
+      .checkDir(this.file.externalDataDirectory, folderName)
+      .then((_) => {
+        console.log('Directory exists.');
+        // Proceed with saving the file
+      })
+      .catch((err) => {
+        console.log('Directory does not exist. Creating...');
+        // Create the directory
+        this.file
+          .createDir(this.file.externalDataDirectory, folderName, false)
+          .then((_) => {
+            console.log('Directory created.');
+            // Proceed with saving the file
+          })
+          .catch((err) => {
+            console.error('Error creating directory:', err);
+          });
+      });
+
+    const blob = new Blob([gpxData], { type: 'application/gpx+xml' }); // Assuming gpxContent is a string containing GPX data
+
+    this.file
+      .writeFile(filePath, title, blob, { replace: true })
+      .then((_) => console.log('GPX file saved successfully.'))
+      .catch((err) => console.error('Error saving GPX file:', err));
+
     this.recording = false;
     this.pause = false;
     this.map.stopLocate();
-    const title = this.fileName;
-    this.mapRecorderService.createTracks({title}).subscribe();
-    this.recordedData = []; // Clear existing data
-
-    // const blob = new Blob([gpxData], { type: 'text/xml' });
-    // const a = document.createElement('a');
-    // a.href = URL.createObjectURL(blob);
-    // a.download = `'${title}.gpx'`;
-    // a.click();
-    // this.mapRecorderService.createTracks({title});
-
-    // Create a Blob from the GPX data
-    // const blob = new Blob([gpxData], { type: 'text/xml' });
-
-    // // Create a File object
-    // const file = new File([blob], `${this.fileName}.gpx`);
-    // this.http.post('../../assets/gpx/', file).subscribe({
-    //   next: response => {
-    //     console.log('File saved successfully:', response);
-    //   },
-    //   error: error => {
-    //     console.error('Error saving file:', error);
-    //   }
-    // });
+    this.recordedData = [];
+    this.mapRecorderService.createTracks({ title }).subscribe();
   }
 
   private generateGPX(data: any[]): string {
-    const gpxStart = '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n' +
-                    '<gpx version="1.1" creator="MapRecorder">\n' +
-                    '  <rte>\n' +
-                    '<name>${fileName}</name>';
-    const gpxEnd = ' </rte>\n' +
-                    '</gpx>';
+    const gpxStart =
+      '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n' +
+      '<gpx version="1.1" creator="MapRecorder">\n' +
+      '  <rte>\n' +
+      '<name>${fileName}</name>';
+    const gpxEnd = ' </rte>\n' + '</gpx>';
 
-    const gpxTrackpoints = data.map(point => `<rtept lat="${point.lat}" lon="${point.lon}"><time>${point.time}</time></rtept>`).join('\n');
+    const gpxTrackpoints = data
+      .map(
+        (point) =>
+          `<rtept lat="${point.lat}" lon="${point.lon}"><time>${point.time}</time></rtept>`
+      )
+      .join('\n');
 
     return gpxStart + gpxTrackpoints + gpxEnd;
   }
@@ -197,55 +190,56 @@ async getLocation() {
   async startRecording(): Promise<void> {
     // Create an alert dialog
     const alert = await this.alertController.create({
-        header: 'GPX File Name',
-        inputs: [
-            {
-                name: 'fileName',
-                type: 'text',
-                placeholder: 'Enter GPX file name'
+      header: 'GPX File Name',
+      inputs: [
+        {
+          name: 'fileName',
+          type: 'text',
+          placeholder: 'Enter GPX file name',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Start Recording',
+          handler: (data) => {
+            // Handler function to execute when the "Start Recording" button is clicked
+            this.fileName = data.fileName.trim();
+            if (this.fileName !== '') {
+              // Proceed with recording
+              this.recording = true;
+              this.recordedData = []; // Clear existing data
+              this.polyline.setLatLngs([]); // Clear existing polyline
+              this.map.locate({
+                watch: true,
+                setView: true,
+                enableHighAccuracy: true,
+              });
+            } else {
+              // Show an alert if no file name is provided
+              this.showFileNameAlert();
             }
-        ],
-        buttons: [
-            {
-                text: 'Cancel',
-                role: 'cancel'
-            },
-            {
-                text: 'Start Recording',
-                handler: (data) => {
-                    // Handler function to execute when the "Start Recording" button is clicked
-                    this.fileName = data.fileName.trim();
-                    if (this.fileName !== '') {
-                        // Proceed with recording
-                        this.recording = true;
-                        this.recordedData = []; // Clear existing data
-                        this.polyline.setLatLngs([]); // Clear existing polyline
-                        this.map.locate({ watch: true, setView: true, enableHighAccuracy: true });
-
-                    } else {
-                        // Show an alert if no file name is provided
-                        this.showFileNameAlert();
-                    }
-                }
-            }
-        ]
+          },
+        },
+      ],
     });
 
     // Present the alert dialog
     await alert.present();
-}
+  }
 
-
-
-async showFileNameAlert(): Promise<void> {
+  async showFileNameAlert(): Promise<void> {
     const alert = await this.alertController.create({
-        header: 'Invalid File Name',
-        message: 'Please enter a valid file name.',
-        buttons: ['OK']
+      header: 'Invalid File Name',
+      message: 'Please enter a valid file name.',
+      buttons: ['OK'],
     });
 
     await alert.present();
-}
+  }
 
   // stopRecording(): void {
   //   this.recording = false;

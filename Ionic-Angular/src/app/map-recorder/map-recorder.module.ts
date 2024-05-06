@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { MapRecorderService } from './map-recorder.service';
 import { MapRecorderRoutingModule } from './map-recorder-routing.module';
-
+import { File } from '@ionic-native/file/ngx';
 
 
 @NgModule({
@@ -24,7 +24,8 @@ import { MapRecorderRoutingModule } from './map-recorder-routing.module';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    MapRecorderService
+    MapRecorderService,
+    File,
   ],
 })
 export class MapRecorderModule { }
