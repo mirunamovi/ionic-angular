@@ -8,12 +8,11 @@
 
 <div class="container">
   <h1 class="heading">PeakGeek<br><br></h1>
-  <!-- <p class="para">Money Flows</p> -->
   <form [formGroup]="loginFormGroup">
     <ion-item lines="none" class="ion-item">
-      <fieldset  class="input-item">
-        <legend>Username</legend> 
-        <ion-input formControlName="username" type="text" placeholder="username"></ion-input>
+      <fieldset class="input-item">
+        <legend>Email</legend> 
+        <ion-input formControlName="email" type="text" placeholder="email"></ion-input>
       </fieldset>
     </ion-item>
     <ion-item lines="none" class="ion-item">
@@ -22,23 +21,11 @@
         <ion-input formControlName="password" type="password" placeholder="*******"></ion-input>
       </fieldset>
     </ion-item>
-    <p class="forget-text"><a (click)="change('forget')">Forgot Password</a></p>
-    <p class="signup-text">I'm a new user&nbsp;<a (click)="change('signup')">Sign Up</a></p>
+    <!-- <p class="forget-text"><a (click)="change('forget')">Forgot Password</a></p> -->
+    <p class="forget-text"><a>Forgot Password</a></p>
+    <p class="signup-text">I'm a new user&nbsp;<a (click)="moveToRegister()">Sign Up</a></p>
     <ion-button class="login-button" (click)="login()"  id="open-loading" expand="block">Login</ion-button>
     <hr/>
-    <!-- <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-button  color="light"><ion-icon name="logo-google"></ion-icon></ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button  color="light"><ion-icon name="logo-facebook"></ion-icon></ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button  color="light"><ion-icon name="logo-linkedin"></ion-icon></ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid> -->
   </form>
 
   <ion-modal
@@ -56,5 +43,19 @@
     </ng-template>
   </ion-modal>
 </div>
+
+<!-- <div class="container"  *ngIf="screen == 'forget'">
+  <h1 class="heading">Forget Password<br><br></h1>
+  <p class="para">Enter email to reset</p>
+  <ion-item lines="none" class="ion-item">
+    <fieldset  class="input-item">
+      <legend>Email</legend> 
+      <ion-input type="email" placeholder="example@domain.com"></ion-input>
+    </fieldset>
+  </ion-item>
+  <p class="signup-text">Remembered Password&nbsp;<a (click)="change('signin')">Log In</a></p>
+  <p class="signup-text">Remembered Password&nbsp;<a >Log In</a></p>
+  <ion-button class="login-button" expand="block">Reset Password</ion-button>
+</div> -->
 
 <ion-content />

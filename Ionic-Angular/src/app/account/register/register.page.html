@@ -1,0 +1,48 @@
+<ion-content [fullscreen]="true">
+  <!-- 
+  <ion-header class="ion-app-login-header"> -->
+    <ion-avatar  class="ion-app-logo">
+      <img alt="Tracking application logo" src="assets/peak.png" />
+    </ion-avatar>
+
+<div class="container">
+  <!-- <h1 class="heading">Create Account<br><br></h1> -->
+  <p class="para">Sign up to get started!</p>
+  <form [formGroup]="registerFormGroup">
+    <ion-item lines="none" class="ion-item">
+      <fieldset  class="input-item">
+        <legend>Name</legend> 
+        <ion-input formControlName="name" type="text" placeholder="Name"></ion-input>
+      </fieldset>
+    </ion-item>
+    <ion-item lines="none" class="ion-item">
+      <fieldset  class="input-item">
+        <legend>Email</legend> 
+        <ion-input formControlName="email" type="email" placeholder="example@domain.com"></ion-input>
+      </fieldset>
+    </ion-item>
+    <ion-item lines="none" class="ion-item">
+      <fieldset class="input-item">
+        <legend>Password</legend> 
+        <ion-input formControlName="password" type="password" placeholder="*******"></ion-input>
+      </fieldset>
+    </ion-item>
+    <ion-item lines="none" class="ion-item">
+      <fieldset class="input-item">
+        <legend>Confirm Password</legend> 
+        <ion-input formControlName="confirmPassword" type="password" placeholder="*******"></ion-input>
+      </fieldset>
+    </ion-item>
+    <p class="signup-text">Already have an account&nbsp;<a (click)="moveToLogin()">Log In</a></p>
+    <ion-button class="login-button" (click)="register()" expand="block">Sign Up</ion-button>
+  </form>
+</div>
+
+<ion-toast
+  [isOpen]="isToastOpen"
+  message="{{toastMessage}}"
+  [duration]="4000"
+  (didDismiss)="setOpen(false)"
+></ion-toast>
+
+<ion-content />

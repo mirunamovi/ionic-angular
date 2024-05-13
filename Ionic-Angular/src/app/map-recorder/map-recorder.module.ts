@@ -8,6 +8,9 @@ import { FormsModule } from '@angular/forms';
 import { MapRecorderService } from './map-recorder.service';
 import { MapRecorderRoutingModule } from './map-recorder-routing.module';
 import { File } from '@ionic-native/file/ngx';
+import { BackgroundGeolocationService } from './background-geolocation.service';
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 
 @NgModule({
@@ -18,13 +21,12 @@ import { File } from '@ionic-native/file/ngx';
     CommonModule,
     FormsModule,
     IonicModule,
-    // HttpClientModule,
     MapRecorderRoutingModule
-
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    MapRecorderService,
+    BackgroundGeolocation,
+    BackgroundGeolocationService,
     File,
   ],
 })

@@ -8,6 +8,7 @@ import { CredentialsInterface, LoginInterface, TokensInterface, UserInterface } 
 import { AuthStoreService } from './auth-store.service';
 import { ApiRoutes } from '../ts/enum/api-routes';
 import { AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_PREFIX } from './interceptors/token.interceptor';
+import { SignUpInterface } from '../ts/interfaces/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ import { AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_PREFIX } from './interce
 export class AuthService {
   private apiUrl = 'http://192.168.0.105:4000'; // Replace with your backend API URL
   // private apiUrl = 'http://localhost:4000'; // Replace with your backend API URL
+  // private apiUrl = 'http://192.168.43.66:4000'; // Replace with your backend API URL
 
 
   router: any;
@@ -24,10 +26,7 @@ export class AuthService {
   get hasAccessToken(): boolean {
     return !!this.authStore.accessToken;
   }
-  // Method to handle user login
-  // login(credentials: { email: string, password: string }) {
-  //   return this.http.post(`${this.apiUrl}/auth/signin`, credentials);
-  // }
+
 
   login(payload: LoginInterface): Observable<CredentialsInterface> {
     return this.http.post<CredentialsInterface>(`${this.apiUrl}/auth/signin`, payload).pipe(
@@ -39,10 +38,10 @@ export class AuthService {
   }
 
   // Method to handle user registration
-  register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/signup`, userData).pipe(
+  register(payload: SignUpInterface): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/signup`, payload).pipe(
       catchError(error => {
-        return throwError(error);
+        return throwError(() => new Error(error));
       })
     );
   }

@@ -9,6 +9,7 @@ import { MapRecorderService } from './map-recorder.service';
 // import { IonicSlides, Platform } from '@ionic/angular';
 import { Geolocation, GeolocationOptions, Position } from '@capacitor/geolocation';
 import { File } from '@ionic-native/file/ngx';
+import { BackgroundGeolocationService } from './background-geolocation.service';
 
 declare const L: any;
 
@@ -36,7 +37,8 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
     private alertController: AlertController,
     private http: HttpClient,
     private mapRecorderService: MapRecorderService,
-    private file: File
+    private file: File,
+    private backgroundGeolocationService: BackgroundGeolocationService
   ) {}
 
   ngOnInit(): void {
@@ -118,21 +120,24 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
     this.polyline.addLatLng(currentLocation);
 
     // Add the location data to the recordedData array if recording is active
-    if (this.recording) {
-      this.recordedData.push({
-        lat: e.latitude,
-        lon: e.longitude,
-        time: new Date().toISOString(),
-      });
-    }
+    // if (this.recording) {
+    //   this.recordedData.push({
+    //     lat: e.latitude,
+    //     lon: e.longitude,
+    //     alt: e.altitude,
+    //     time: new Date().toISOString(),
+    //   });
+    // }
     L.circle(e.latitude, e.longitude).addTo(this.map);
   }
 
-  saveGPX() {
+  async saveGPX() {
     const folderName = 'PeakGeek';
     const title = this.fileName;
 
-    const gpxData = this.generateGPX(this.recordedData);
+    const gpxData =  await this.backgroundGeolocationService.stopTracking(this.fileName);
+    // const gpxData =  this.generateGPX(this.recordedData);
+
     const filePath = this.file.externalDataDirectory + folderName + '/'; // Add folder name to the path
 
     this.file
@@ -162,30 +167,30 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
       .then((_) => console.log('GPX file saved successfully.'))
       .catch((err) => console.error('Error saving GPX file:', err));
 
-    this.recording = false;
+    // this.recording = false;
     this.pause = false;
     this.map.stopLocate();
-    this.recordedData = [];
+    // this.recordedData = [];
     this.mapRecorderService.createTracks({ title }).subscribe();
   }
 
-  private generateGPX(data: any[]): string {
-    const gpxStart =
-      '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n' +
-      '<gpx version="1.1" creator="MapRecorder">\n' +
-      '  <rte>\n' +
-      '<name>${fileName}</name>';
-    const gpxEnd = ' </rte>\n' + '</gpx>';
+  // private generateGPX(data: any[]): string {
+  //   const gpxStart =
+  //     '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n' +
+  //     '<gpx version="1.1" creator="MapRecorder">\n' +
+  //     '  <rte>\n' +
+  //     `<name>${this.fileName}</name>`;
+  //   const gpxEnd = ' </rte>\n' + '</gpx>';
 
-    const gpxTrackpoints = data
-      .map(
-        (point) =>
-          `<rtept lat="${point.lat}" lon="${point.lon}"><time>${point.time}</time></rtept>`
-      )
-      .join('\n');
+  //   const gpxTrackpoints = data
+  //     .map(
+  //       (point) =>
+  //         `<rtept lat="${point.lat}" lon="${point.lon}"><time>${point.time}</time><ele>${point.alt}</ele></rtept>`
+  //     )
+  //     .join('\n');
 
-    return gpxStart + gpxTrackpoints + gpxEnd;
-  }
+  //   return gpxStart + gpxTrackpoints + gpxEnd;
+  // }
 
   async startRecording(): Promise<void> {
     // Create an alert dialog
@@ -211,7 +216,8 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
             if (this.fileName !== '') {
               // Proceed with recording
               this.recording = true;
-              this.recordedData = []; // Clear existing data
+              // this.recordedData = []; // Clear existing data
+              this.backgroundGeolocationService.startTracking();
               this.polyline.setLatLngs([]); // Clear existing polyline
               this.map.locate({
                 watch: true,

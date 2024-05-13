@@ -13,12 +13,12 @@ import { Router } from '@angular/router';
 })
 export class LoginPage implements OnInit {
 
-  screen: any = 'signin';
+  // screen: any = 'signin';
 
   error: string = '';
 
   loginFormGroup: FormGroup = new FormGroup({
-    username: new FormControl("", [Validators.required]),
+    email: new FormControl("", [Validators.required]),
     password: new FormControl("", [Validators.required])
   });
 
@@ -33,7 +33,7 @@ export class LoginPage implements OnInit {
   login() {
     if (this.loginFormGroup.valid) {
       
-      const email = this.loginFormGroup.get('username')!.value;
+      const email = this.loginFormGroup.get('email')!.value;
       const password = this.loginFormGroup.get('password')!.value;
 
       this.authService.login({ email, password })
@@ -61,11 +61,16 @@ export class LoginPage implements OnInit {
     }
   }
 
-
-
-  change(event: any){
-    this.screen = event;
+  moveToRegister() {
+    console.log("Vreau sa merg la register");
+    this.router.navigate(['/register']);
   }
+
+
+
+  // change(event: any){
+  //   this.screen = event;
+  // }
 
 
 }
