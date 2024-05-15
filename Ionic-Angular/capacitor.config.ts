@@ -9,9 +9,11 @@ const config: CapacitorConfig = {
     // url: "http://localhost:8100",
     // url: "http://192.168.0.104:8101",
 
-    cleartext: true,
-    
+    cleartext: true,    
   },
+  
+  
+
 };
 
 export default config;

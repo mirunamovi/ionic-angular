@@ -15,6 +15,7 @@ export class BackgroundGeolocationService {
   public lat: number = 0;
   public lng: number = 0;
   public alt: number = 0;
+  
 
   constructor(public zone: NgZone, public backgroundGeolocation: BackgroundGeolocation,
     private platform: Platform, private alertCtrl: AlertController) {
@@ -49,28 +50,42 @@ export class BackgroundGeolocationService {
       }
 
       this.backgroundGeolocation.configure(this.config).then(() => {
+        // Background geolocation configured successfully
+        console.log('BackgroundGeolocation configured');
+      
         this.backgroundGeolocation.on(BackgroundGeolocationEvents.location).subscribe(
-          (location: BackgroundGeolocationResponse) => {
+          (location) => {
             console.log('BackgroundGeolocation: ' + location.latitude + ',' + location.longitude);
         
             // Run update inside of Angular's zone
             // this.zone.run(() => {
-              this.logs.push({
-                lat: location.latitude,
-                lon: location.longitude,
-                alt: location.altitude,
-                time: new Date().toISOString(),
-              });
-              // this.cdr.detectChanges();
-              console.log(this.logs);
+            this.logs.push({
+              lat: location.latitude,
+              lon: location.longitude,
+              alt: location.altitude,
+              time: new Date().toISOString(),
+            });
+            // this.cdr.detectChanges();
+            console.log(this.logs);
             // });
           }
         );
-      }).catch((error) => console.error('BackgroundGeolocation initialization error:', error));
-    
-      // Turn ON the background-geolocation system.
-      this.backgroundGeolocation.start();
-    
+      
+        console.log("Before calling start()");
+        // Turn ON the background-geolocation system.
+        this.backgroundGeolocation.start()
+          .then(() => {
+            // Start successful
+            console.log("BackgroundGeolocation start successful");
+          })
+          .catch((error) => {
+            // Error occurred
+            console.error("BackgroundGeolocation start error:", error);
+          });
+      }).catch((error) => {
+        // Error configuring background geolocation
+        console.error('BackgroundGeolocation initialization error:', error);
+      });
     
       // Foreground Tracking
 

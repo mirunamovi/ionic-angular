@@ -10,6 +10,7 @@ import { MapRecorderService } from './map-recorder.service';
 import { Geolocation, GeolocationOptions, Position } from '@capacitor/geolocation';
 import { File } from '@ionic-native/file/ngx';
 import { BackgroundGeolocationService } from './background-geolocation.service';
+import { LocationTracker } from './bglocation-capacitor';
 
 declare const L: any;
 
@@ -32,6 +33,7 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
 
   private destroyed = false;
   private watchId: string | undefined;
+  locationTracker = new LocationTracker();
 
   constructor(
     private alertController: AlertController,
@@ -135,7 +137,8 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
     const folderName = 'PeakGeek';
     const title = this.fileName;
 
-    const gpxData =  await this.backgroundGeolocationService.stopTracking(this.fileName);
+    const gpxData = await this.locationTracker.stopTracking();
+  
     // const gpxData =  this.generateGPX(this.recordedData);
 
     const filePath = this.file.externalDataDirectory + folderName + '/'; // Add folder name to the path
@@ -217,7 +220,8 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
               // Proceed with recording
               this.recording = true;
               // this.recordedData = []; // Clear existing data
-              this.backgroundGeolocationService.startTracking();
+              this.locationTracker.startTracking();
+
               this.polyline.setLatLngs([]); // Clear existing polyline
               this.map.locate({
                 watch: true,
