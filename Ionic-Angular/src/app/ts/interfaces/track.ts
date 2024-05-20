@@ -3,4 +3,5 @@ export interface TrackInterface {
   title: string;
   // user: Object;
   // createdAt: Date;
+  url: string;
 }

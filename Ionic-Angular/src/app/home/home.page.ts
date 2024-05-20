@@ -32,6 +32,10 @@ export class HomePage {
     this.userName = this.http.get<any>('http://192.168.0.105:4000/user').pipe(
       map((response: any) => response.name.value)
     );
+
+    // this.userName = this.http.get<any>('http://192.168.0.116:4000/user').pipe(
+    //   map((response: any) => response.name.value)
+    // );
   } 
 
   private async presentExitConfirmation() {

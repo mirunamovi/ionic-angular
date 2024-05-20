@@ -11,6 +11,8 @@ import { Geolocation, GeolocationOptions, Position } from '@capacitor/geolocatio
 import { File } from '@ionic-native/file/ngx';
 import { BackgroundGeolocationService } from './background-geolocation.service';
 import { LocationTracker } from './bglocation-capacitor';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { catchError, tap } from 'rxjs';
 
 declare const L: any;
 
@@ -20,6 +22,9 @@ declare const L: any;
   styleUrls: ['./map-recorder.component.css'],
 })
 export class MapRecorderComponent implements OnInit, OnDestroy{
+
+  isOffline = false;
+
   map: any;
   polyline: any;
   marker: any;
@@ -31,9 +36,19 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
   longitude?: number;
   altitude?: number | null;
 
+  url = "http://192.168.0.105:4000/uploads/";
   private destroyed = false;
   private watchId: string | undefined;
   locationTracker = new LocationTracker();
+  isToastOpen: boolean = false;
+  toastMessage = 'Welcome to PeakGeek';
+
+  uploadFormGroup: FormGroup = new FormGroup({
+    title: new FormControl('', [Validators.required]),
+    file: new FormControl('', [Validators.required]),
+    fileSource: new FormControl('', [Validators.required])
+  })
+
 
   constructor(
     private alertController: AlertController,
@@ -133,67 +148,64 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
     L.circle(e.latitude, e.longitude).addTo(this.map);
   }
 
-  async saveGPX() {
-    const folderName = 'PeakGeek';
-    const title = this.fileName;
-
-    const gpxData = await this.locationTracker.stopTracking();
   
-    // const gpxData =  this.generateGPX(this.recordedData);
+  async saveGPX() {
 
-    const filePath = this.file.externalDataDirectory + folderName + '/'; // Add folder name to the path
+      const folderName = 'PeakGeek';
+      const title = this.fileName;
+      const url = this.url + `${title}.gpx`;
 
-    this.file
-      .checkDir(this.file.externalDataDirectory, folderName)
-      .then((_) => {
-        console.log('Directory exists.');
-        // Proceed with saving the file
+      const gpxData = await this.locationTracker.stopTracking();
+      const blob = new Blob([gpxData], { type: 'application/gpx+xml' }); // Assuming gpxContent is a string containing GPX data
+
+    if(this.isOffline){
+      const filePath = this.file.externalDataDirectory + folderName + '/'; // Add folder name to the path
+
+      this.file
+        .checkDir(this.file.externalDataDirectory, folderName)
+        .then((_) => {
+          console.log('Directory exists.');
+          // Proceed with saving the file
+        })
+        .catch((err) => {
+          console.log('Directory does not exist. Creating...');
+          // Create the directory
+          this.file
+            .createDir(this.file.externalDataDirectory, folderName, false)
+            .then((_) => {
+              console.log('Directory created.');
+              // Proceed with saving the file
+            })
+            .catch((err) => {
+              console.error('Error creating directory:', err);
+            });
+        });
+    
+      this.file
+        .writeFile(filePath, title, blob, { replace: true })
+        .then((_) => console.log('GPX file saved successfully.'))
+        .catch((err) => console.error('Error saving GPX file:', err));
+
+      // this.recording = false;
+      this.pause = false;
+      this.map.stopLocate();
+      // this.recordedData = [];
+      // this.mapRecorderService.createTracks({ title, url }).subscribe();
+      
+    } else {
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('file', blob, `${title}.gpx`);
+
+      this.http.post('http://192.168.0.105:4000/tracks/upload', formData)
+      .subscribe(res => {
+        console.log(res);
+        this.toastMessage =
+          'Uploaded Successfully.'; 
       })
-      .catch((err) => {
-        console.log('Directory does not exist. Creating...');
-        // Create the directory
-        this.file
-          .createDir(this.file.externalDataDirectory, folderName, false)
-          .then((_) => {
-            console.log('Directory created.');
-            // Proceed with saving the file
-          })
-          .catch((err) => {
-            console.error('Error creating directory:', err);
-          });
-      });
-
-    const blob = new Blob([gpxData], { type: 'application/gpx+xml' }); // Assuming gpxContent is a string containing GPX data
-
-    this.file
-      .writeFile(filePath, title, blob, { replace: true })
-      .then((_) => console.log('GPX file saved successfully.'))
-      .catch((err) => console.error('Error saving GPX file:', err));
-
-    // this.recording = false;
-    this.pause = false;
-    this.map.stopLocate();
-    // this.recordedData = [];
-    this.mapRecorderService.createTracks({ title }).subscribe();
+    }
+    
   }
-
-  // private generateGPX(data: any[]): string {
-  //   const gpxStart =
-  //     '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>\n' +
-  //     '<gpx version="1.1" creator="MapRecorder">\n' +
-  //     '  <rte>\n' +
-  //     `<name>${this.fileName}</name>`;
-  //   const gpxEnd = ' </rte>\n' + '</gpx>';
-
-  //   const gpxTrackpoints = data
-  //     .map(
-  //       (point) =>
-  //         `<rtept lat="${point.lat}" lon="${point.lon}"><time>${point.time}</time><ele>${point.alt}</ele></rtept>`
-  //     )
-  //     .join('\n');
-
-  //   return gpxStart + gpxTrackpoints + gpxEnd;
-  // }
 
   async startRecording(): Promise<void> {
     // Create an alert dialog
@@ -251,11 +263,6 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
     await alert.present();
   }
 
-  // stopRecording(): void {
-  //   this.recording = false;
-  //   this.map.stopLocate();
-  // }
-
   pauseRecording(): void {
     this.recording = false;
     this.pause = true;
@@ -266,5 +273,9 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
     this.recording = true;
     this.pause = false;
     this.map.locate({ watch: true, setView: true });
+  }
+
+  setOpen(isOpen: boolean) {
+    this.isToastOpen = isOpen;
   }
 }

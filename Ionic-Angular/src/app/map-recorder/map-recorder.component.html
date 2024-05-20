@@ -36,4 +36,12 @@
       <ion-item>Altitude: {{ altitude }}</ion-item>
     </ion-card-content>
   </ion-card>
+
+
+  <ion-toast
+  [isOpen]="isToastOpen"
+  message="{{toastMessage}}"
+  [duration]="4000"
+  (didDismiss)="setOpen(false)"
+></ion-toast>
 </ion-content>

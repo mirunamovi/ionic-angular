@@ -26,6 +26,13 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
     canActivate: [AuthGuardService],
   },
+  {
+    path: 'record',
+    loadChildren: () =>
+      import('src/app/map-recorder/map-recorder.module').then(
+        (m) => m.MapRecorderModule
+      ),
+  },
 
   //  {
   //   path: '',

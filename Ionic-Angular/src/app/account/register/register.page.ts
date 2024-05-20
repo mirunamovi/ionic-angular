@@ -70,5 +70,6 @@ export class RegisterPage implements OnInit {
     console.log("Vreau sa merg la login");
     this.router.navigate(['/login']);
   }
+
 }
 

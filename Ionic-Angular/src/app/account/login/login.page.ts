@@ -66,6 +66,12 @@ export class LoginPage implements OnInit {
     this.router.navigate(['/register']);
   }
 
+  moveToRecorder() {
+    console.log("Vreau sa merg la recorder");
+    let isOffline = false;
+    this.router.navigate(['/record']).then(() => console.log("merge")).catch(() => console.log("nu merge"));
+  }
+
 
 
   // change(event: any){

@@ -29,6 +29,13 @@ const routes: Routes = [
         (m) => m.ActivityListModule
       ),
   },
+  {
+    path: 'tracks/upload',
+    loadChildren: () =>
+      import('src/app/upload-tracks/upload-tracks.module').then(
+        (m) => m.UploadTracksModule
+      ),
+  },
 ];
 
 @NgModule({

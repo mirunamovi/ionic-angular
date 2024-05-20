@@ -14,9 +14,10 @@ import { SignUpInterface } from '../ts/interfaces/auth';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://192.168.0.105:4000'; // Replace with your backend API URL
+  // private apiUrl = 'http://192.168.0.116:4000'; // Replace with your backend API URL
   // private apiUrl = 'http://localhost:4000'; // Replace with your backend API URL
   // private apiUrl = 'http://192.168.43.66:4000'; // Replace with your backend API URL
+  private apiUrl = 'http://192.168.0.105:4000'; // Replace with your backend API URL
 
 
   router: any;
