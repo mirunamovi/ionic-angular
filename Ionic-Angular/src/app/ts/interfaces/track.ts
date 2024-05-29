@@ -5,3 +5,11 @@ export interface TrackInterface {
   // createdAt: Date;
   url: string;
 }
+
+export interface Track {
+  userId: string;
+  _id: string;
+  title: string;
+  createdAt: Date;
+  url: string;
+}

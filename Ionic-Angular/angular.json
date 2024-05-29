@@ -34,11 +34,16 @@
             ],
             "styles": [
               "node_modules/leaflet/dist/leaflet.css",
+              "src/assets/libs/leaflet/leaflet.css",
               "src/theme/variables.scss", 
-              "src/global.css"],
+              "src/global.css",
+              "src/assets/Control.FullScreen.css"
+            ],
             "scripts": [
               "node_modules/leaflet/dist/leaflet.js",
-              "node_modules/leaflet-omnivore/leaflet-omnivore.min.js"
+              "src/assets/libs/leaflet/leaflet.js",
+              "src/assets/Control.FullScreen.js",
+              "src/assets/libs/leaflet/gpx.js"
             ]
           },
           "configurations": {

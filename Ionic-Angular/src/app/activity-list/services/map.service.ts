@@ -11,18 +11,21 @@ const defaultCoords: number[] = [40, 80];
 const defaultZoom: number = 8;
 
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
 
+  map: any;
+
   constructor() { }
 
-  getActivity(id: number) {
-    console.log(id);    
-    console.log(SAVED_ACTIVITIES.slice(0).find(activity => activity.id == id));
-    return SAVED_ACTIVITIES.slice(0).find(run => run.id == id);
-  }
+  // getActivity(id: number) {
+  //   console.log(id);    
+  //   console.log(SAVED_ACTIVITIES.slice(0).find(activity => activity.id == id));
+  //   return SAVED_ACTIVITIES.slice(0).find(run => run.id == id);
+  // }
 
   // getMap(){
   //   var map = L.map('map').setView(defaultCoords, defaultZoom);
@@ -43,13 +46,19 @@ export class MapService {
     };
 
     let map = L.map('map').setView(defaultCoords, defaultZoom);
-
-    map.maxZoom = 200;
+    this.map = new L.Map('map', {
+      center: [43.0, -79.0],
+      zoom: 15,
+    });
+    L.control.fullscreen().addTo(this.map);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-      maxZoom: 18
-    }).addTo(map);
+      attribution: '© OpenStreetMap contributors',
+    }).addTo(this.map);
+
+    setTimeout(() => {
+      this.map.invalidateSize();
+    }, 800);
 
     var activity = SAVED_ACTIVITIES.slice(0).find(run => run.id == id);
 
@@ -69,19 +78,6 @@ export class MapService {
     } else {
       console.error(`Activity with ID ${id} not found.`);
     }
-  }
-
-  createTrack(fileName: string) {
-    const gpxData = `../../assets/gpx/${fileName}.gpx`; // Assuming the GPX file is stored in the assets/gpx folder
-    
-    const track: IActivity = {
-      id: 3,
-      name: fileName,
-      date: new Date('12/03/2024'),
-      gpxData: gpxData // Store the path to the GPX file in the gpxData property
-    };
-
-    SAVED_ACTIVITIES.push(track); // Push the track into the SAVED_ACTIVITIES array
   }
 }
 

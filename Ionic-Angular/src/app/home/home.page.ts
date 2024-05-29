@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AlertController, Platform } from '@ionic/angular';
-import { map } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
+import { UserInterface } from '../ts/interfaces';
+import { HomeService } from './home.service';
 
 @Component({
   selector: 'app-home',
@@ -9,9 +11,8 @@ import { map } from 'rxjs';
   styleUrls: ['home.page.css'],
 })
 export class HomePage {
-  userName: any;
-
-  constructor(private http: HttpClient, public platform: Platform, public alertCtrl: AlertController) { 
+  name: any;
+  constructor(private http: HttpClient, public platform: Platform, public alertCtrl: AlertController, private homeService: HomeService) { 
     platform.ready().then(() => {
         // Check if the platform is ready before attempting to register the back button action
         this.platform.backButton.subscribeWithPriority(10, () => {
@@ -19,23 +20,24 @@ export class HomePage {
       });
     });
 }
-  ngOnInit() {
+  async ngOnInit() {
     // Make HTTP request to fetch user information
     // this.userName = this.http.get<any>('http://localhost:4000/user').pipe(
     //   map((response: any) => response.name.value)
     // );
-
-    // this.userName = this.http.get<any>('http://192.168.43.66:4000/user').pipe(
-    //   map((response: any) => response.name.value)
-    // );
-
-    this.userName = this.http.get<any>('http://192.168.0.105:4000/user').pipe(
-      map((response: any) => response.name.value)
+    this.homeService.getUser().subscribe(
+      (user: UserInterface) => {
+        this.name = user.name;
+      },
+      (error) => {
+        // Handle error if needed
+        console.error('Error occurred while fetching user:', error);
+      }
     );
-
-    // this.userName = this.http.get<any>('http://192.168.0.116:4000/user').pipe(
+    // this.userName = this.http.get<any>('http://192.168.0.105:4000/user').pipe(
     //   map((response: any) => response.name.value)
     // );
+
   } 
 
   private async presentExitConfirmation() {

@@ -66,9 +66,21 @@ export class UploadTracksComponent implements OnInit {
     if (fileControl?.value) {
       formData.append('file', fileControl.value);
     }
-
    
-    this.http.post('http://192.168.0.105:4000/tracks/upload', formData)
+    // this.http.post('http://192.168.46.213:4000/tracks/upload', formData)
+    //   .subscribe(res => {
+    //     console.log(res);
+    //     this.toastMessage =
+    //       'Uploaded Successfully.'; 
+    //   })
+      // this.http.post('http://localhost:4000/tracks/upload', formData)
+      // .subscribe(res => {
+      //   console.log(res);
+      //   this.toastMessage =
+      //     'Uploaded Successfully.'; 
+      // })
+
+      this.http.post('http://192.168.0.109:4000/tracks/upload', formData)
       .subscribe(res => {
         console.log(res);
         this.toastMessage =

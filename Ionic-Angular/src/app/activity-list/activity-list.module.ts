@@ -6,8 +6,10 @@ import { MapComponent } from '../map/map.component';
 import { MapService } from './services/map.service';
 import { ActivityService } from './services/activity.service';
 import { IonicModule } from '@ionic/angular';
-import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { HTTP_INTERCEPTORS} from '@angular/common/http';
 import { AuthInterceptor } from '../auth/auth.interceptor';
+import { CardComponent } from '../card/card.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -15,10 +17,10 @@ import { AuthInterceptor } from '../auth/auth.interceptor';
   imports: [
     CommonModule,
     IonicModule,
-    // HttpClientModule,
+    RouterModule,
     ActivityListRoutingModule
   ],
-  declarations: [ActivityListComponent, MapComponent],
+  declarations: [ActivityListComponent, CardComponent],
   providers: [ 
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     ActivityService, 

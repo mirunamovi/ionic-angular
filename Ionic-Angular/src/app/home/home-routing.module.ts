@@ -4,30 +4,28 @@ import { HomePage } from './home.page';
 import { MapComponent } from '../map/map.component';
 import { ActivityListComponent } from '../activity-list/activity-list.component';
 import { MapRecorderComponent } from '../map-recorder/map-recorder.component';
+import { AuthGuardService } from '../auth/auth-guard.service';
 
 const routes: Routes = [
   {
     path: '',
     component: HomePage,
   },
-  // pathMatch: 'full',
-  // },
-  // { path: 'record', component: MapRecorderComponent },
-  // { path: 'runs', component: ActivityListComponent },
-
   {
     path: 'record',
     loadChildren: () =>
       import('src/app/map-recorder/map-recorder.module').then(
         (m) => m.MapRecorderModule
       ),
+    canActivate: [AuthGuardService],
   },
   {
-    path: 'runs',
+    path: 'activities',
     loadChildren: () =>
       import('src/app/activity-list/activity-list.module').then(
         (m) => m.ActivityListModule
       ),
+    canActivate: [AuthGuardService],
   },
   {
     path: 'tracks/upload',
@@ -35,6 +33,7 @@ const routes: Routes = [
       import('src/app/upload-tracks/upload-tracks.module').then(
         (m) => m.UploadTracksModule
       ),
+    canActivate: [AuthGuardService],
   },
 ];
 

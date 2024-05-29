@@ -45,4 +45,8 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 export class AppModule {}
 
 
+
+function join(__dirname: string, arg1: string, arg2: string) {
+  throw new Error('Function not implemented.');
+}
   

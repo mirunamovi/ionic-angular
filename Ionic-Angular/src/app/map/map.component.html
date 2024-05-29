@@ -3,17 +3,18 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <!-- <ion-title>Map</ion-title> -->
+    <ion-title>View the track</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" scroll-y="true">
 <div class="row row-map">
-  <div class="col-md-9">
-      <h2 class="heading">Map</h2>
-      <hr/>
+  <!-- app.component.html -->
+  <app-map-view [gpxUrl]= "'http://192.168.0.109:4000/public/uploads/route_(1)_.gpx'" [mapId]="'map'"></app-map-view>
+
+  <!-- <div class="col-md-9">
     <div id="map"></div>
-  </div>
+  </div> -->
   <div class="col-md-3 info-container">
     <div id="run-info">
       <h2 class="heading">Run Data</h2>
@@ -23,17 +24,18 @@
       <hr/>
 
       <div class="data-heading">Date:</div>
-      <p class="data-entry">{{ activityDate | date:"longDate" }} <p>
+      <p class="data-entry">{{ activityDate | date:"yyyy-MM-dd" }} <p>
       <hr/>
 
-      <div class="data-heading">Total Distance:</div>
+      <!-- <div class="data-heading">Total Distance:</div>
       <p class="data-entry">{{ activityDistance }} miles</p>
       <hr/>
 
       <div class="data-heading">Comments:</div>
-      <p class="data-entry">{{ activityComments }}</p>
+      <p class="data-entry">{{ activityComments }}</p> -->
       <hr/>
     </div>
   </div>
 </div>
 </ion-content>
+

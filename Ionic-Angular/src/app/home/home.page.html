@@ -1,12 +1,12 @@
-<ion-header [translucent]="true">
+<!-- <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
       PeakGeek
     </ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="background">
   <!-- <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Hi! {{ userName }}</ion-title>
@@ -16,15 +16,14 @@
   </ion-header> -->
 
   <div class="container">
+    <ion-title size="large">Hi! {{ name }}</ion-title>
+      <a routerLink="/logout" routerLinkActive = "active" class = "item"><p>Logout</p></a> 
+
     <nav id ="" class="navbar navbar-custom">
-      <a routerLink="runs" class = "item"><p>Activity</p></a> 
-      <a routerLink="record" class = "item"><p>Record</p></a> 
-      <a routerLink="tracks/upload" class = "item"><p>Upload</p></a> 
+      <a routerLink="activities" class = "item"><p class="glass-button">Activity</p></a> 
+      <a routerLink="record" class = "item"><p class="glass-button">Record</p></a> 
+      <a routerLink="tracks/upload" class = "item"><p class="glass-button">Upload</p></a> 
 
     </nav>
-    
-    <div class="container">
-        <router-outlet></router-outlet>
-    </div>
   </div>
 </ion-content>

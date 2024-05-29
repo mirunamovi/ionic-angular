@@ -10,6 +10,7 @@ export class AuthGuardService {
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     if (this.authService.isAuthenticated()) {
+      console.log("e autorizat");
       return true; // Allow access if the user is authenticated
     } else {
       this.router.navigate(['/login'], { queryParams: { returnUrl: route.url } });// Redirect to login page if not authenticated

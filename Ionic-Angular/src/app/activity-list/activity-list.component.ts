@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { IActivity } from '../shared/activity.model';
 import { ActivityService } from './services/activity.service';
 import { ActivityListService } from './activity-list.service';
-import { TrackInterface } from '../ts/interfaces/track';
+import { Track, TrackInterface } from '../ts/interfaces/track';
 import { IRun } from '../shared/run.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-activity-list',
@@ -12,26 +13,29 @@ import { IRun } from '../shared/run.model';
 })
 export class ActivityListComponent implements OnInit {
 
-  activities?: IActivity[];
-  totalActivities?: number;
-  totalDistance?: number;
-  firstDate?: Date;
-  runs?: IRun[];
+  activities?: Track[];
 
-  constructor(private _activityService: ActivityService, private activityListService: ActivityListService) { }
 
-  ngOnInit() {
-    this.activities = this._activityService.getActivities();
-    this.totalActivities = this._activityService.getTotalActivities(this.activities);
-    this.totalDistance = this._activityService.getTotalDistance(this.activities);
-    this.firstDate = this._activityService.getFirstDate(this.activities);
+  constructor(private activityListService: ActivityListService, private router: Router) { }
+
+ async ngOnInit() {
 
     this.activityListService.getTracks().subscribe(
-      (data: any ) => this.runs = data
+      (data: Track[] ) => this.activities = data
     );
-  }
 
+    const ids = this.activities?.map(activity => activity._id);
+    console.log(ids); // Log the array of IDs
+  }
   
-  
+
+  goToMap(trackId: string){
+    console.log("am intrat in gotomap");
+    console.log("trackId: " + trackId);
+    this.router.navigate(['home', 'activities', 'activity', trackId])
+     .then(success => console.log('Navigation success:', success))
+     .catch(err => console.error('Navigation error:', err));
+
+  }
   
 }

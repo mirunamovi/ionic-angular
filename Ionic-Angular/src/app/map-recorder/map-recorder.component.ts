@@ -35,8 +35,15 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
   latitude?: number;
   longitude?: number;
   altitude?: number | null;
+  showSaveButton: boolean = false;
+  
 
-  url = "http://192.168.0.105:4000/uploads/";
+
+  url = "http://192.168.0.109:4000/public/uploads/";
+  // url = 'http://192.168.46.213:4000/tracks/'
+  // url = 'http://localhost:4000/tracks/'
+
+
   private destroyed = false;
   private watchId: string | undefined;
   locationTracker = new LocationTracker();
@@ -66,6 +73,7 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy() {
+    console.log("ngOnDestroy is called");
     this.destroyed = true;
     if (this.watchId) {
       Geolocation.clearWatch({ id: this.watchId });
@@ -92,10 +100,12 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
 
 
   initMap(): void {
-    this.map = L.map('map', {
+
+    this.map = new L.Map('map', {
       center: [43.0, -79.0],
       zoom: 15,
-    }).fitWorld();
+    });
+    L.control.fullscreen().addTo(this.map);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
@@ -111,6 +121,11 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
       maxZoom: 16, // Maximum zoom level
       enableHighAccuracy: true, // Use high accuracy mode if available
     });
+
+    this.map.on('click', function(e: { latlng: { lat: string; lng: string; }; }) {
+      alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
+  });
+
   }
 
   initMapRecorder(): void {
@@ -118,6 +133,7 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
     this.marker = L.marker([0, 0], { icon: this.customIcon }).addTo(this.map);
 
     this.map.on('locationfound', (e: any) => this.onLocationFound(e));
+
   }
 
   private customIcon = L.icon({
@@ -150,6 +166,11 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
 
   
   async saveGPX() {
+
+      this.showSaveButton = false;
+      this.recording = false;
+      this.pause = false;
+      this.map.stopLocate();
 
       const folderName = 'PeakGeek';
       const title = this.fileName;
@@ -186,18 +207,28 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
         .then((_) => console.log('GPX file saved successfully.'))
         .catch((err) => console.error('Error saving GPX file:', err));
 
-      // this.recording = false;
-      this.pause = false;
-      this.map.stopLocate();
       // this.recordedData = [];
       // this.mapRecorderService.createTracks({ title, url }).subscribe();
       
     } else {
+
       const formData = new FormData();
       formData.append('title', title);
       formData.append('file', blob, `${title}.gpx`);
 
-      this.http.post('http://192.168.0.105:4000/tracks/upload', formData)
+      // this.http.post('http://192.168.46.213:4000/tracks/upload', formData)
+      // .subscribe(res => {
+      //   console.log(res);
+      //   this.toastMessage =
+      //     'Uploaded Successfully.'; 
+      // })
+      // this.http.post('http://localhost:4000/tracks/upload', formData)
+      // .subscribe(res => {
+      //   console.log(res);
+      //   this.toastMessage =
+      //     'Uploaded Successfully.'; 
+      // })
+      this.http.post('http://192.168.0.109:4000/tracks/upload', formData)
       .subscribe(res => {
         console.log(res);
         this.toastMessage =
@@ -233,6 +264,7 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
               this.recording = true;
               // this.recordedData = []; // Clear existing data
               this.locationTracker.startTracking();
+              this.showSaveButton = true;
 
               this.polyline.setLatLngs([]); // Clear existing polyline
               this.map.locate({

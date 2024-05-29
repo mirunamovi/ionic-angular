@@ -1,13 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
-import { TrackInterface } from '../ts/interfaces/track';
-import { IRun } from '../shared/run.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ActivityListService {
+export class HomeService {
 
   // private apiUrl = 'http://192.168.0.116:4000'; // Replace with your backend API URL
   // private apiUrl = 'http://192.168.46.213:4000'; // Replace with your backend API URL
@@ -17,9 +15,9 @@ export class ActivityListService {
 
   constructor(private http: HttpClient) { }
 
-  getTracks(): Observable<any>{
-    console.log("Am intrat in getTracks")
-    return this.http.get(`${this.apiUrl}/tracks`).pipe(
+  getUser(): Observable<any>{
+    console.log("Am intrat in getUsers")
+    return this.http.get(`${this.apiUrl}/users`).pipe(
       tap((response: any) => {
         console.log('GET request successful:', response);
       }),
@@ -30,9 +28,4 @@ export class ActivityListService {
     
     );
   }
-
-  
-  
-
-
 }

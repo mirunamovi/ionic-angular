@@ -34,49 +34,6 @@ const routes: Routes = [
       ),
   },
 
-  //  {
-  //   path: '',
-  //   redirectTo: '/login',
-  //   pathMatch: 'full'
-  // },
-  // {
-  //   path: 'login',
-  //   loadChildren: () => import('./account/login/login.module').then( m => m.LoginPageModule)
-  // },
-  // {
-  //   path: 'home',
-  //   canActivate: [AuthGuardService],
-  //   loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
-  //   children: [
-
-  //     { 
-  //       path: 'record', 
-  //       loadChildren: () =>
-  //       import('src/app/map-recorder/map-recorder.module').then(
-  //         (m) => m.MapRecorderModule
-  //       ),
-  //     },
-  //     { 
-  //       path: 'runs', 
-  //       loadChildren: () =>
-  //       import('src/app/activity-list/activity-list.module').then(
-  //         (m) => m.ActivityListModule
-          
-  //       ),
-  //       children:[
-  //         { 
-  //           path: 'run/:id', 
-  //         //   loadChildren: () =>
-  //         //   import('src/app/map/map.component').then(
-  //         //   (m) => m.MapComponent
-  //         // ),
-  //         component: MapComponent
-  //        },    
-  //       ]
-
-  //     },
-  //   ],
-  // },
   { path: '**', redirectTo: '' }
 ];
 
