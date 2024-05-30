@@ -1,18 +1,22 @@
 import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 // import * as L from 'leaflet';
-import 'leaflet-omnivore';
 import { AlertController } from '@ionic/angular';
-import { MapService } from '../activity-list/services/map.service';
 import { HttpClient } from '@angular/common/http';
 import { MapRecorderService } from './map-recorder.service';
-// import { Geolocation } from '@ionic-native/geolocation/ngx';
-// import { IonicSlides, Platform } from '@ionic/angular';
-import { Geolocation, GeolocationOptions, Position } from '@capacitor/geolocation';
+import {
+  Geolocation,
+  GeolocationOptions,
+  Position,
+} from '@capacitor/geolocation';
 import { File } from '@ionic-native/file/ngx';
 import { BackgroundGeolocationService } from './background-geolocation.service';
 import { LocationTracker } from './bglocation-capacitor';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { catchError, tap } from 'rxjs';
+import { NetworkAwareHandler } from '../NetworkAware/NetworkAware.directive';
+import {
+  ConnectionStatus,
+  NetworkService,
+} from '../NetworkAware/network.service';
 
 declare const L: any;
 
@@ -21,9 +25,27 @@ declare const L: any;
   templateUrl: './map-recorder.component.html',
   styleUrls: ['./map-recorder.component.css'],
 })
-export class MapRecorderComponent implements OnInit, OnDestroy{
+export class MapRecorderComponent extends NetworkAwareHandler {
+  protected override onNetworkStatusChange(status: ConnectionStatus) {
+    if (status === ConnectionStatus.Offline) {
+      this.handleOfflineStatus();
+    } else {
+      this.handleOnlineStatus();
+    }
+  }
 
-  isOffline = false;
+  private handleOfflineStatus() {
+    // Handle offline status
+    console.log('Network is offline. Taking appropriate actions.');
+    // Add your logic here
+  }
+
+  private handleOnlineStatus() {
+    // Handle online status
+    console.log('Network is online. Taking appropriate actions.');
+    // Add your logic here
+  }
+
 
   map: any;
   polyline: any;
@@ -36,13 +58,10 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
   longitude?: number;
   altitude?: number | null;
   showSaveButton: boolean = false;
-  
 
-
-  url = "http://192.168.0.109:4000/public/uploads/";
+  url = 'http://mimovi.go.ro:4000/uploads/';
   // url = 'http://192.168.46.213:4000/tracks/'
   // url = 'http://localhost:4000/tracks/'
-
 
   private destroyed = false;
   private watchId: string | undefined;
@@ -53,67 +72,84 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
   uploadFormGroup: FormGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
     file: new FormControl('', [Validators.required]),
-    fileSource: new FormControl('', [Validators.required])
-  })
-
+    fileSource: new FormControl('', [Validators.required]),
+  });
 
   constructor(
     private alertController: AlertController,
     private http: HttpClient,
     private mapRecorderService: MapRecorderService,
     private file: File,
-    private backgroundGeolocationService: BackgroundGeolocationService
-  ) {}
+    networkService: NetworkService
+  ) {
+    super(networkService);
+  }
 
-  ngOnInit(): void {
-
+  override ngOnInit(): void {
+    super.ngOnInit();
     this.initMap();
     this.initMapRecorder();
     this.getLocation();
   }
 
-  ngOnDestroy() {
-    console.log("ngOnDestroy is called");
+  override ngOnDestroy() {
+    super.ngOnDestroy();
+    console.log('ngOnDestroy is called');
     this.destroyed = true;
     if (this.watchId) {
       Geolocation.clearWatch({ id: this.watchId });
     }
   }
 
-
   async getLocation() {
-    const options: PositionOptions = { timeout: 5000, enableHighAccuracy: true };
-    Geolocation.watchPosition(options, (position: Position | null, error?: GeolocationPositionError) => {
-      if (!this.destroyed && !error && position !== null) {
-          this.latitude = position.coords.latitude,
-          this.longitude = position.coords.longitude,
-          this.altitude = position.coords.altitude,
-          console.log('New location received:', position.coords.latitude, position.coords.longitude);
-
-        };
-      }).then(watchId => {
+    const options: PositionOptions = {
+      timeout: 5000,
+      enableHighAccuracy: true,
+    };
+    Geolocation.watchPosition(
+      options,
+      (position: Position | null, error?: GeolocationPositionError) => {
+        if (!this.destroyed && !error && position !== null) {
+          (this.latitude = position.coords.latitude),
+            (this.longitude = position.coords.longitude),
+            (this.altitude = position.coords.altitude),
+            console.log(
+              'New location received:',
+              position.coords.latitude,
+              position.coords.longitude
+            );
+        }
+      }
+    )
+      .then((watchId) => {
         this.watchId = watchId;
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.error('Error starting geolocation watch:', error);
       });
-    }
-
+  }
 
   initMap(): void {
-
     this.map = new L.Map('map', {
-      center: [43.0, -79.0],
+      center: [43.0, 22.0],
       zoom: 15,
     });
-    L.control.fullscreen().addTo(this.map);
+    // L.control.fullscreen().addTo(this.map);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
+      attribution:
+        'Map data &copy; <a href="http://www.osm.org">OpenStreetMap</a>',
     }).addTo(this.map);
 
-    setTimeout(() => {
-      this.map.invalidateSize();
-    }, 800);
+    this.map.whenReady(() => {
+      setTimeout(() => {
+        this.map.invalidateSize();
+      }, 1000);
+    });
+
+    // setTimeout(() => {
+    //   this.map.invalidateSize();
+    // }, 800);
 
     this.map.locate({
       watch: true, // Continuously update the user's location
@@ -121,19 +157,14 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
       maxZoom: 16, // Maximum zoom level
       enableHighAccuracy: true, // Use high accuracy mode if available
     });
-
-    this.map.on('click', function(e: { latlng: { lat: string; lng: string; }; }) {
-      alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
-  });
-
   }
 
   initMapRecorder(): void {
+    console.log('Am intrat in initmaprecorder');
     this.polyline = L.polyline([], { color: 'blue' }).addTo(this.map);
     this.marker = L.marker([0, 0], { icon: this.customIcon }).addTo(this.map);
 
     this.map.on('locationfound', (e: any) => this.onLocationFound(e));
-
   }
 
   private customIcon = L.icon({
@@ -152,34 +183,26 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
     // Update the polyline with the new location
     this.polyline.addLatLng(currentLocation);
 
-    // Add the location data to the recordedData array if recording is active
-    // if (this.recording) {
-    //   this.recordedData.push({
-    //     lat: e.latitude,
-    //     lon: e.longitude,
-    //     alt: e.altitude,
-    //     time: new Date().toISOString(),
-    //   });
-    // }
     L.circle(e.latitude, e.longitude).addTo(this.map);
   }
 
-  
   async saveGPX() {
+    this.showSaveButton = false;
+    this.recording = false;
+    this.pause = false;
+    this.map.stopLocate();
 
-      this.showSaveButton = false;
-      this.recording = false;
-      this.pause = false;
-      this.map.stopLocate();
+    const folderName = 'PeakGeek';
+    const title = this.fileName;
+    const url = this.url + `${title}.gpx`;
 
-      const folderName = 'PeakGeek';
-      const title = this.fileName;
-      const url = this.url + `${title}.gpx`;
+    const gpxData = await this.locationTracker.stopTracking();
+    const blob = new Blob([gpxData], { type: 'application/gpx+xml' }); // Assuming gpxContent is a string containing GPX data
 
-      const gpxData = await this.locationTracker.stopTracking();
-      const blob = new Blob([gpxData], { type: 'application/gpx+xml' }); // Assuming gpxContent is a string containing GPX data
+    if (this.currentStatus === ConnectionStatus.Offline) {
+      this.setOpen(true);
+      this.toastMessage = 'No Internet Connection. The Track will be saved in your filesystem.';
 
-    if(this.isOffline){
       const filePath = this.file.externalDataDirectory + folderName + '/'; // Add folder name to the path
 
       this.file
@@ -201,41 +224,34 @@ export class MapRecorderComponent implements OnInit, OnDestroy{
               console.error('Error creating directory:', err);
             });
         });
-    
+
       this.file
         .writeFile(filePath, title, blob, { replace: true })
         .then((_) => console.log('GPX file saved successfully.'))
         .catch((err) => console.error('Error saving GPX file:', err));
 
-      // this.recordedData = [];
-      // this.mapRecorderService.createTracks({ title, url }).subscribe();
-      
     } else {
 
       const formData = new FormData();
       formData.append('title', title);
       formData.append('file', blob, `${title}.gpx`);
 
-      // this.http.post('http://192.168.46.213:4000/tracks/upload', formData)
-      // .subscribe(res => {
-      //   console.log(res);
-      //   this.toastMessage =
-      //     'Uploaded Successfully.'; 
-      // })
-      // this.http.post('http://localhost:4000/tracks/upload', formData)
-      // .subscribe(res => {
-      //   console.log(res);
-      //   this.toastMessage =
-      //     'Uploaded Successfully.'; 
-      // })
-      this.http.post('http://192.168.0.109:4000/tracks/upload', formData)
-      .subscribe(res => {
-        console.log(res);
-        this.toastMessage =
-          'Uploaded Successfully.'; 
-      })
-    }
-    
+      this.http
+            .post('http://mimovi.go.ro:4000/tracks/upload', formData)
+            .subscribe((res) => {
+              console.log(res);
+              this.setOpen(true);
+              this.toastMessage = 'Uploaded Successfully.';
+            });
+        }
+    //   this.http
+    //     .post('http://192.168.0.109:4000/tracks/upload', formData)
+    //     .subscribe((res) => {
+    //       console.log(res);
+    //       this.setOpen(true);
+    //       this.toastMessage = 'Uploaded Successfully.';
+    //     });
+    // }
   }
 
   async startRecording(): Promise<void> {

@@ -10,8 +10,9 @@
 <ion-content [fullscreen]="true" scroll-y="true">
 <div class="row row-map">
   <!-- app.component.html -->
-  <app-map-view [gpxUrl]= "'http://192.168.0.109:4000/public/uploads/route_(1)_.gpx'" [mapId]="'map'"></app-map-view>
-
+  <div *ngIf="gpxUrl">
+     <app-map-view [gpxUrl]= "gpxUrl" [mapId]="'map'"></app-map-view>
+  </div>
   <!-- <div class="col-md-9">
     <div id="map"></div>
   </div> -->
@@ -20,7 +21,7 @@
       <h2 class="heading">Run Data</h2>
       <hr/>
       <div class="data-heading">Route Name:</div>
-      <p class="data-entry">{{ activityName }}</p>
+      <p class="data-entry">{{ activityTitle }}</p>
       <hr/>
 
       <div class="data-heading">Date:</div>

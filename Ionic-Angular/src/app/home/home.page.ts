@@ -4,15 +4,39 @@ import { AlertController, Platform } from '@ionic/angular';
 import { firstValueFrom, map } from 'rxjs';
 import { UserInterface } from '../ts/interfaces';
 import { HomeService } from './home.service';
+import { NetworkAwareHandler} from '../NetworkAware/NetworkAware.directive';
+import { ConnectionStatus, NetworkService } from '../NetworkAware/network.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.css'],
 })
-export class HomePage {
+export class HomePage extends NetworkAwareHandler{
+
+  protected override onNetworkStatusChange(status: ConnectionStatus) {
+    if (status === ConnectionStatus.Offline) {
+      this.handleOfflineStatus();
+    } else {
+      this.handleOnlineStatus();
+    }
+  }
+
+  private handleOfflineStatus() {
+    // Handle offline status
+    console.log('Network is offline. Taking appropriate actions.');
+    // Add your logic here
+  }
+
+  private handleOnlineStatus() {
+    // Handle online status
+    console.log('Network is online. Taking appropriate actions.');
+    // Add your logic here
+  }
+ 
   name: any;
-  constructor(private http: HttpClient, public platform: Platform, public alertCtrl: AlertController, private homeService: HomeService) { 
+  constructor(public platform: Platform, public alertCtrl: AlertController, private homeService: HomeService, networkService: NetworkService) { 
+    super(networkService);
     platform.ready().then(() => {
         // Check if the platform is ready before attempting to register the back button action
         this.platform.backButton.subscribeWithPriority(10, () => {
@@ -20,11 +44,10 @@ export class HomePage {
       });
     });
 }
-  async ngOnInit() {
-    // Make HTTP request to fetch user information
-    // this.userName = this.http.get<any>('http://localhost:4000/user').pipe(
-    //   map((response: any) => response.name.value)
-    // );
+  override async ngOnInit() {
+    
+    super.ngOnInit();
+
     this.homeService.getUser().subscribe(
       (user: UserInterface) => {
         this.name = user.name;
@@ -34,9 +57,6 @@ export class HomePage {
         console.error('Error occurred while fetching user:', error);
       }
     );
-    // this.userName = this.http.get<any>('http://192.168.0.105:4000/user').pipe(
-    //   map((response: any) => response.name.value)
-    // );
 
   } 
 

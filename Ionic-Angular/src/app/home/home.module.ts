@@ -9,8 +9,6 @@ import { MapComponent} from '../map/map.component';
 import { ActivityListComponent } from '../activity-list/activity-list.component';
 
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { ActivityService } from '../activity-list/services/activity.service';
-import { MapService } from '../activity-list/services/map.service';
 import { MapRecorderComponent } from '../map-recorder/map-recorder.component';
 import { AuthInterceptor } from '../auth/auth.interceptor';
 

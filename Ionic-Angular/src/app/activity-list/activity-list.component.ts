@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IActivity } from '../shared/activity.model';
-import { ActivityService } from './services/activity.service';
 import { ActivityListService } from './activity-list.service';
-import { Track, TrackInterface } from '../ts/interfaces/track';
-import { IRun } from '../shared/run.model';
+import { Track} from '../ts/interfaces/track';
 import { Router } from '@angular/router';
 
 @Component({

@@ -3,7 +3,7 @@ export interface TrackInterface {
   title: string;
   // user: Object;
   // createdAt: Date;
-  url: string;
+  fileName: string;
 }
 
 export interface Track {
@@ -11,5 +11,5 @@ export interface Track {
   _id: string;
   title: string;
   createdAt: Date;
-  url: string;
+  fileName: string;
 }

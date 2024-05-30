@@ -36,8 +36,8 @@
               "node_modules/leaflet/dist/leaflet.css",
               "src/assets/libs/leaflet/leaflet.css",
               "src/theme/variables.scss", 
-              "src/global.css",
-              "src/assets/Control.FullScreen.css"
+              "src/assets/Control.FullScreen.css",
+              "src/global.css"         
             ],
             "scripts": [
               "node_modules/leaflet/dist/leaflet.js",

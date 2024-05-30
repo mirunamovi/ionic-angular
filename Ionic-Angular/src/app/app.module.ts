@@ -15,6 +15,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoginPage } from './account/login/login.page';
 import { HomePage } from './home/home.page';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { Network } from '@ionic-native/network/ngx';
 
 
 @NgModule({
@@ -32,7 +33,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     providers: [ 
       { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-      // HttpClientModule, 
+      Network 
 
     ],
   //   exports: [

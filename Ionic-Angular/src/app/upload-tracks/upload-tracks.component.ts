@@ -10,7 +10,8 @@ import { catchError, tap } from 'rxjs';
 })
 export class UploadTracksComponent implements OnInit {
 
-  // url = "http://192.168.0.105:4000/uploads/";
+  // url = "http://192.168.0.109:4000/tracks/upload";
+  url = "http://mimovi.go.ro:4000/tracks/upload";
 
   error: string = '';
   isLoading: boolean = false;
@@ -56,6 +57,9 @@ export class UploadTracksComponent implements OnInit {
 
     if (this.uploadFormGroup.invalid) {
       console.log("Form is invalid");
+      this.toastMessage =
+          'Form is invalid.'; 
+      this.setOpen(true);
       return;
     }
 
@@ -66,25 +70,14 @@ export class UploadTracksComponent implements OnInit {
     if (fileControl?.value) {
       formData.append('file', fileControl.value);
     }
-   
-    // this.http.post('http://192.168.46.213:4000/tracks/upload', formData)
-    //   .subscribe(res => {
-    //     console.log(res);
-    //     this.toastMessage =
-    //       'Uploaded Successfully.'; 
-    //   })
-      // this.http.post('http://localhost:4000/tracks/upload', formData)
-      // .subscribe(res => {
-      //   console.log(res);
-      //   this.toastMessage =
-      //     'Uploaded Successfully.'; 
-      // })
 
-      this.http.post('http://192.168.0.109:4000/tracks/upload', formData)
+      this.http.post(this.url, formData)
       .subscribe(res => {
         console.log(res);
         this.toastMessage =
           'Uploaded Successfully.'; 
+        this.setOpen(true);
+        this.uploadFormGroup.reset();
       })
   }
 

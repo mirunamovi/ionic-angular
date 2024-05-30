@@ -29,34 +29,14 @@
     <hr/>
   </form>
 
-  <ion-modal
-    trigger="open-loading"
-    [initialBreakpoint]="0.25"
-    [breakpoints]="[0, 0.25, 0.5, 0.75]"
-    handleBehavior="cycle"
-  >
-    <ng-template>
-      <ion-content class="ion-padding">
-        <div class="ion-margin-top">
-          <ion-label>{{error}}</ion-label>
-        </div>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
-</div>
+  <ion-toast
+  [isOpen]="isToastOpen"
+  message="{{toastMessage}}"
+  [duration]="4000"
+  (didDismiss)="setOpen(false)"
+></ion-toast>
 
-<!-- <div class="container"  *ngIf="screen == 'forget'">
-  <h1 class="heading">Forget Password<br><br></h1>
-  <p class="para">Enter email to reset</p>
-  <ion-item lines="none" class="ion-item">
-    <fieldset  class="input-item">
-      <legend>Email</legend> 
-      <ion-input type="email" placeholder="example@domain.com"></ion-input>
-    </fieldset>
-  </ion-item>
-  <p class="signup-text">Remembered Password&nbsp;<a (click)="change('signin')">Log In</a></p>
-  <p class="signup-text">Remembered Password&nbsp;<a >Log In</a></p>
-  <ion-button class="login-button" expand="block">Reset Password</ion-button>
-</div> -->
+</div> 
+
 
 <ion-content />

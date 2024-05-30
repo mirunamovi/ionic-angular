@@ -10,7 +10,8 @@ export class HomeService {
   // private apiUrl = 'http://192.168.0.116:4000'; // Replace with your backend API URL
   // private apiUrl = 'http://192.168.46.213:4000'; // Replace with your backend API URL
   // private apiUrl = 'http://localhost:4000'; // Replace with your backend API URL
-  private apiUrl = 'http://192.168.0.109:4000'; // Replace with your backend API URL
+  // private apiUrl = 'http://192.168.0.109:4000'; // Replace with your backend API URL
+  private apiUrl = 'http://mimovi.go.ro:4000'; // Replace with your backend API URL
 
 
   constructor(private http: HttpClient) { }

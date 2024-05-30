@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
-import * as L from 'leaflet';
 import 'leaflet-gpx';
 import { MapViewService } from '../map/map.service';
+declare let L: any;
 
 @Component({
   selector: 'app-map-view',
@@ -18,11 +18,12 @@ export class MapViewComponent implements AfterViewInit {
     this.displayGpx();
   }
   displayGpx() {
+    console.log("gpxUrl in mapview " + this.gpxUrl + " " + this.mapId);
+
     if (!this.gpxUrl || !this.mapId) return;
 
-    console.log(this.gpxUrl);
 
-    const map = L.map(this.mapId).setView([51.505, -0.09], 13); // Set a default view if necessary
+    const map = L.map(this.mapId).setView([45.505, 25.02], 15); // Set a default view if necessary
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="http://www.osm.org">OpenStreetMap</a>'
     }).addTo(map);
@@ -42,24 +43,9 @@ export class MapViewComponent implements AfterViewInit {
         map.fitBounds(gpx.getBounds());
         control.addOverlay(gpx, gpx.get_name());
       }).addTo(map);
+
+      L.control.fullscreen().addTo(map);
+
     });
   }
-
-    // Ensure 'leaflet-gpx' is properly imported and used
-  //   new L.GPX(this.gpxUrl, {
-  //     async: true,
-  //     marker_options: {
-  //       startIconUrl: 'assets/pin-icon-start.png',
-  //       endIconUrl: 'assets/pin-icon-end.png',
-  //       shadowUrl: 'assets/pin-shadow.png',
-  //     },
-  //   }).on('loaded', function(e: any) {
-  //     const gpx = e.target;
-  //     map.fitBounds(gpx.getBounds());
-  //     control.addOverlay(gpx, gpx.get_name());
-    
-  //     // Example of using the `gpx` variable for additional operations
-  //     console.log(gpx.get_distance());
-  //   }).addTo(map);
-  // }
 }
