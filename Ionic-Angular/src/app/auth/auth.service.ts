@@ -3,12 +3,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { CredentialsInterface, LoginInterface, TokensInterface, UserInterface } from '../ts/interfaces';
 import { AuthStoreService } from './auth-store.service';
 import { ApiRoutes } from '../ts/enum/api-routes';
 import { AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_PREFIX } from './interceptors/token.interceptor';
 import { SignUpInterface } from '../ts/interfaces/auth';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -22,9 +23,7 @@ export class AuthService {
 
 
 
-  router: any;
-
-  constructor(private http: HttpClient, private authStore: AuthStoreService) { }
+  constructor(private http: HttpClient, private authStore: AuthStoreService, private router: Router,) { }
 
   get hasAccessToken(): boolean {
     return !!this.authStore.accessToken;
@@ -54,38 +53,45 @@ export class AuthService {
     return !!token;
   }
 
-  // logout(){
-  //   localStorage.removeItem('token');
-  //   this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-  //       this.router.navigate(['']));
-  // }
-
-  logout(): Observable<void> {
-    return this.http.post<void>(ApiRoutes.Logout, {}).pipe(
-      map(() => {
+  logout(){
+    console.log("am intrat in logout din authservice");
+    return this.http.post(`${this.apiUrl}/auth/logout`, {}).pipe(
+      tap(() => {
         this.authStore.logout();
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-          this.router.navigate(['']));
-        
+        console.log('Navigating to login');
+        this.router.navigate(['/login']).then((success: any) => {
+          if (success) {
+            console.log('Navigation to login successful');
+          } else {
+            console.log('Navigation to login failed');
+          }
+        }).catch((err: any) => {
+          console.error('Navigation error:', err);
+        });
+      }),
+      catchError(error => {
+        console.error('Logout failed', error);
+        return throwError(error);
       })
     );
   }
+  
 
-  getUserInfo(): Observable<UserInterface> {
-    return this.http.get<UserInterface>(ApiRoutes.UserInfo).pipe(
-      map((user: UserInterface) => {
-        this.authStore.setUserInfo(user);
-        return user;
-      })
-    );
-  }
+  // getUserInfo(): Observable<UserInterface> {
+  //   return this.http.get<UserInterface>(ApiRoutes.UserInfo).pipe(
+  //     map((user: UserInterface) => {
+  //       this.authStore.setUserInfo(user);
+  //       return user;
+  //     })
+  //   );
+  // }
 
 
   refreshToken(): Observable<TokensInterface> {
     const headers = {
       [AUTHORIZATION_HEADER_KEY]: `${AUTHORIZATION_HEADER_PREFIX} ${this.authStore.refreshToken}`,
     };
-    return this.http.get<TokensInterface>(ApiRoutes.Refresh, { headers }).pipe(
+    return this.http.get<TokensInterface>(`${this.apiUrl}/auth/refresh`, { headers }).pipe(
       map(({ accessToken, refreshToken }: TokensInterface) => {
         this.authStore.setAccessToken(accessToken);
         this.authStore.setRefreshToken(refreshToken);

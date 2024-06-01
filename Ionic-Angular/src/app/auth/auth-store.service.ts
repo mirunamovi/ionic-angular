@@ -26,9 +26,13 @@ export class AuthStoreService {
   }
 
   logout(): void {
+    console.log("am ajuns in logout din authstore");
     this.setAccessToken(null);
     this.setRefreshToken(null);
     this.setUserInfo(null);
+    console.log("Access token: " + this.accessToken);
+    console.log("Refresh token: " + this.refreshToken);
+
   }
 
   setAccessToken(token: string | null): void {

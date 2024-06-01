@@ -6,6 +6,7 @@ import { UserInterface } from '../ts/interfaces';
 import { HomeService } from './home.service';
 import { NetworkAwareHandler} from '../NetworkAware/NetworkAware.directive';
 import { ConnectionStatus, NetworkService } from '../NetworkAware/network.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -35,7 +36,7 @@ export class HomePage extends NetworkAwareHandler{
   }
  
   name: any;
-  constructor(public platform: Platform, public alertCtrl: AlertController, private homeService: HomeService, networkService: NetworkService) { 
+  constructor(public platform: Platform, public alertCtrl: AlertController, private homeService: HomeService, networkService: NetworkService, private authService: AuthService) { 
     super(networkService);
     platform.ready().then(() => {
         // Check if the platform is ready before attempting to register the back button action
@@ -59,6 +60,12 @@ export class HomePage extends NetworkAwareHandler{
     );
 
   } 
+
+  logout() {
+    this.authService.logout().subscribe(() => {
+      console.log('User logged out');
+    });
+  }
 
   private async presentExitConfirmation() {
     const alert = this.alertCtrl.create({
