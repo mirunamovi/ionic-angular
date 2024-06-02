@@ -194,30 +194,31 @@ export class MapRecorderComponent extends NetworkAwareHandler {
 
     const folderName = 'PeakGeek';
     const title = this.fileName;
-    const url = this.url + `${title}.gpx`;
 
     const gpxData = await this.locationTracker.stopTracking();
-    const blob = new Blob([gpxData], { type: 'application/gpx+xml' }); // Assuming gpxContent is a string containing GPX data
+    const blob = new Blob([gpxData], { type: 'application/gpx' }); // Assuming gpxContent is a string containing GPX data
 
     if (this.currentStatus === ConnectionStatus.Offline) {
       this.setOpen(true);
       this.toastMessage = 'No Internet Connection. The Track will be saved in your filesystem.';
 
-      const filePath = this.file.externalDataDirectory + folderName + '/'; // Add folder name to the path
+      const filePath = this.file.externalRootDirectory + "/Download/"+ folderName + '/'; // Add folder name to the path
 
       this.file
-        .checkDir(this.file.externalDataDirectory, folderName)
+        .checkDir(this.file.externalRootDirectory + "/Download/", folderName)
         .then((_) => {
           console.log('Directory exists.');
           // Proceed with saving the file
         })
         .catch((err) => {
-          console.log('Directory does not exist. Creating...');
+          this.setOpen(true);
+          this.toastMessage = 'Directory created.';
           // Create the directory
           this.file
-            .createDir(this.file.externalDataDirectory, folderName, false)
+            .createDir(this.file.externalRootDirectory + "/Download/", folderName, false)
             .then((_) => {
-              console.log('Directory created.');
+              this.setOpen(true);
+              this.toastMessage = 'Directory created.';
               // Proceed with saving the file
             })
             .catch((err) => {
@@ -226,8 +227,13 @@ export class MapRecorderComponent extends NetworkAwareHandler {
         });
 
       this.file
-        .writeFile(filePath, title, blob, { replace: true })
-        .then((_) => console.log('GPX file saved successfully.'))
+        .writeFile(filePath, `${title}.gpx`, blob, { replace: true })
+        .then((_) => {
+          console.log('GPX file saved successfully.');
+          this.setOpen(true);
+          this.toastMessage = 'GPX file saved successfully.';
+        }
+        )
         .catch((err) => console.error('Error saving GPX file:', err));
 
     } else {
