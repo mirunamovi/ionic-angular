@@ -34,15 +34,15 @@
             ],
             "styles": [
               "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/leaflet-fullscreen/dist/leaflet.fullscreen.css",
               "src/assets/libs/leaflet/leaflet.css",
               "src/theme/variables.scss", 
-              "src/assets/Control.FullScreen.css",
               "src/global.css"         
             ],
             "scripts": [
               "node_modules/leaflet/dist/leaflet.js",
+              "node_modules/leaflet-fullscreen/dist/Leaflet.fullscreen.min.js", 
               "src/assets/libs/leaflet/leaflet.js",
-              "src/assets/Control.FullScreen.js",
               "src/assets/libs/leaflet/gpx.js"
             ]
           },

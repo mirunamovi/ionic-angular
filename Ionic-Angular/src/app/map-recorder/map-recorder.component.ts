@@ -17,6 +17,8 @@ import {
   ConnectionStatus,
   NetworkService,
 } from '../NetworkAware/network.service';
+import 'leaflet-fullscreen';
+
 
 declare const L: any;
 
@@ -146,6 +148,12 @@ export class MapRecorderComponent extends NetworkAwareHandler {
         this.map.invalidateSize();
       }, 1000);
     });
+    this.map.addControl(new L.Control.Fullscreen({
+      position: 'topleft',
+      title: 'Show me the fullscreen!',
+      titleCancel: 'Exit fullscreen mode',
+      forceSeparateButton: true
+    }));
 
     // setTimeout(() => {
     //   this.map.invalidateSize();

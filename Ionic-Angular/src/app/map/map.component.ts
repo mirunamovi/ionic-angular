@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Track } from '../ts/interfaces/track';
@@ -26,10 +26,9 @@ export class MapComponent implements OnInit {
   // url = 'http://localhost:4000/tracks/'
   url = 'http://mimovi.go.ro:4000/tracks/';
 
+  @Output() distance: any;
+  @Output() duration: any;
 
-
-
-  
   constructor(private http: HttpClient,
               private route: ActivatedRoute) { }
 
@@ -38,7 +37,9 @@ export class MapComponent implements OnInit {
   activityFileName?: string;
   activityComments?: string;
   activityDate?: Date;
-  activityDistance?: number;
+  // activityDistance?: any;
+  // activityDuration?: any;
+
 
   async ngOnInit() {
     this.route.paramMap.subscribe(async params => {
@@ -50,6 +51,16 @@ export class MapComponent implements OnInit {
         await this.getActivity(this.trackId);
       }
     });
+  }
+
+  onDistanceChange(newDistance: any) {
+    this.distance = newDistance;
+    console.log('Distance:', this.distance);
+  }
+
+  onDurationChange(newDuration: any) {
+    this.duration = newDuration;
+    console.log('Duration:', this.duration);
   }
 
   getTrack(trackId: string | null): Observable<Track> {
@@ -68,6 +79,11 @@ export class MapComponent implements OnInit {
         this.activityTitle = this.activity.title;
         this.activityFileName = this.activity.fileName;
         this.activityDate = this.activity.createdAt;
+        // this.activityDuration = this.duration;
+        // console.log(this.duration);
+        // this.activityDistance = this.distance;
+        // console.log(this.distance);
+
         // this.gpxUrl = "http://192.168.0.109:4000/uploads/" + this.activityFileName;
         this.gpxUrl = "http://mimovi.go.ro:4000/uploads/" + this.activityFileName;
 
