@@ -14,10 +14,7 @@
      <app-map-view [gpxUrl]= "gpxUrl" [mapId]="'map'" (distanceChange)="onDistanceChange($event)" 
      (durationChange)="onDurationChange($event)"></app-map-view>
   </div>
-  <!-- <div class="col-md-9">
-    <div id="map"></div>
-  </div> -->
-  <div class="col-md-3 info-container">
+  <!-- <div class="col-md-3 info-container">
     <div id="run-info">
       <h2 class="heading">Run Data</h2>
       <hr/>
@@ -37,7 +34,55 @@
       <p class="data-entry">{{ duration }}</p>
       <hr/>
     </div>
+  </div> -->
+  <div class="ion-padding">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="6" size-lg="3" class="info-box">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Route Name</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              {{ activityTitle }}
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="12" size-md="6" size-lg="3" class="info-box">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Date</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              {{ activityDate | date:"yyyy-MM-dd" }}
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="12" size-md="6" size-lg="3" class="info-box">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Total Distance</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              {{ distance }} miles
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="12" size-md="6" size-lg="3" class="info-box">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Duration</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              {{ duration }}
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
+  
+  
 </div>
 </ion-content>
 

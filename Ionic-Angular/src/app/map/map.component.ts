@@ -37,9 +37,6 @@ export class MapComponent implements OnInit {
   activityFileName?: string;
   activityComments?: string;
   activityDate?: Date;
-  // activityDistance?: any;
-  // activityDuration?: any;
-
 
   async ngOnInit() {
     this.route.paramMap.subscribe(async params => {
@@ -79,12 +76,6 @@ export class MapComponent implements OnInit {
         this.activityTitle = this.activity.title;
         this.activityFileName = this.activity.fileName;
         this.activityDate = this.activity.createdAt;
-        // this.activityDuration = this.duration;
-        // console.log(this.duration);
-        // this.activityDistance = this.distance;
-        // console.log(this.distance);
-
-        // this.gpxUrl = "http://192.168.0.109:4000/uploads/" + this.activityFileName;
         this.gpxUrl = "http://mimovi.go.ro:4000/uploads/" + this.activityFileName;
 
         console.log("gpxUrl in map component " + this.gpxUrl);

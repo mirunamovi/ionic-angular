@@ -22,3 +22,46 @@
   padding: 8px 0px 2px 16px;
   font-size: 1.5em;
 }
+
+
+.data-heading {
+  font-weight: bold;
+  color: #333;
+}
+
+.data-entry {
+  text-align: right;
+  color: #555;
+}
+
+.info-box {
+  padding: 15px;
+}
+
+ion-card {
+  --background: #f0f8f5; /* Light greenish background */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+ion-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+ion-card-header {
+  background: #4caf50; /* Green background */
+  color: #ffffff;
+  text-align: center;
+}
+
+ion-card-title {
+  font-size: 1.2em;
+}
+
+ion-card-content {
+  font-size: 1em;
+  color: #333;
+  text-align: center;
+  padding: 10px 0;
+}

@@ -5,11 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import { MapRecorderService } from './map-recorder.service';
 import {
   Geolocation,
-  GeolocationOptions,
   Position,
 } from '@capacitor/geolocation';
 import { File } from '@ionic-native/file/ngx';
-import { BackgroundGeolocationService } from './background-geolocation.service';
 import { LocationTracker } from './bglocation-capacitor';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NetworkAwareHandler } from '../NetworkAware/NetworkAware.directive';
