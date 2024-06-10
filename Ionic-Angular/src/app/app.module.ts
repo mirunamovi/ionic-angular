@@ -27,6 +27,7 @@ import { Network } from '@ionic-native/network/ngx';
     IonicModule.forRoot(), 
     AppRoutingModule,
     HttpClientModule,
+    
 
     // RouterModule.forRoot(appRoutes)],
   ],

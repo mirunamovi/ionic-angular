@@ -7,6 +7,7 @@ import { MapRoutingModule } from './map-routing.module';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { MapViewComponent } from '../map-view/map-view.component';
+import { File } from '@ionic-native/file/ngx';
 
 
 
@@ -21,7 +22,9 @@ import { MapViewComponent } from '../map-view/map-view.component';
     IonicModule,
     RouterModule,
     HttpClientModule,
-    MapRoutingModule
-  ]
+    MapRoutingModule,
+    
+  ],
+  providers: [File]
 })
 export class MapModule { }

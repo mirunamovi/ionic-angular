@@ -33,12 +33,13 @@ export class MapViewComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.displayGpx();
   }
+
   displayGpx() {
     console.log('gpxUrl in mapview ' + this.gpxUrl + ' ' + this.mapId);
 
     if (!this.gpxUrl || !this.mapId) return;
 
-    const map = L.map(this.mapId).setView([45.505, 25.02], 15); // Set a default view if necessary
+    const map = L.map(this.mapId).setView([45.505, 25.02], 10); // Set a default view if necessary
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         'Map data &copy; <a href="http://www.osm.org">OpenStreetMap</a>',
@@ -178,4 +179,5 @@ calculateCumulativeDistances(data: any[]): number[] {
   }
     });
   }
+
 }

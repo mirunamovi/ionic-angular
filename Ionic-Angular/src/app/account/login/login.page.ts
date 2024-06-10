@@ -77,7 +77,7 @@ export class LoginPage extends NetworkAwareHandler {
         this.authService.login({ email, password })
           .pipe(
             tap((response) => {
-              localStorage.setItem('token', response.accessToken);
+              localStorage.setItem('access-token', response.accessToken);
               console.log(response);
               if(response.accessToken != null){
                 this.setOpen(true);

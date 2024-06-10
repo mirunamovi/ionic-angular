@@ -265,6 +265,7 @@ export class MapRecorderComponent extends NetworkAwareHandler {
     //     });
     // }
   }
+  
 
   async startRecording(): Promise<void> {
     // Create an alert dialog

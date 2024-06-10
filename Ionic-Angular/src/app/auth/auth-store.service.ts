@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CredentialsInterface, UserInterface } from '../ts/interfaces';
 import { LocalStorage } from '../ts/enum';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,10 +11,13 @@ export class AuthStoreService {
   refreshToken: string | null = null;
   accessToken: string | null = null;
   user: UserInterface | null = null;
+  private accessTokenKey = 'access-token';
+  private refreshTokenKey = 'refresh-token';
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.refreshToken = localStorage.getItem(LocalStorage.RefreshToken);
     this.accessToken = localStorage.getItem(LocalStorage.AccessToken);
+    
   }
 
   get isAuthenticated(): boolean {
@@ -46,6 +51,14 @@ export class AuthStoreService {
     localStorage.setItem(LocalStorage.AccessToken, token);
   }
 
+  getAccessToken(): string | null {
+    return localStorage.getItem(this.accessTokenKey);
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem(this.refreshTokenKey);
+  }
+
   setRefreshToken(token: string | null): void {
     this.refreshToken = token;
 
@@ -60,4 +73,34 @@ export class AuthStoreService {
   setUserInfo(user: UserInterface | null): void {
     this.user = user;
   }
+
+  setTokens(accessToken: string, refreshToken: string): void {
+    localStorage.setItem(this.accessTokenKey, accessToken);
+    localStorage.setItem(this.refreshTokenKey, refreshToken);
+  }
+
+  clearTokens(): void {
+    localStorage.removeItem(this.accessTokenKey);
+    localStorage.removeItem(this.refreshTokenKey);
+  }
+
+  refreshAccessToken(): Observable<string> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+
+    return this.http.post<{ accessToken: string }>('your-refresh-token-endpoint', { refreshToken })
+      .pipe(
+        map(response => {
+          this.setTokens(response.accessToken, refreshToken);
+          return response.accessToken;
+        })
+      );
+  }
+
+
+
+
+
 }

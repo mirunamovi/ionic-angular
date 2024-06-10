@@ -81,8 +81,17 @@
       </ion-row>
     </ion-grid>
   </div>
-  
-  
+  <button (click)="downloadGPX()">Download GPX</button>
+  <button (click)="deleteRecording()">Delete GPX</button>
+
+  <ion-toast
+  [isOpen]="isToastOpen"
+  message="{{toastMessage}}"
+  [duration]="4000"
+  (didDismiss)="setOpen(false)"
+></ion-toast>
+
+
 </div>
 </ion-content>
 

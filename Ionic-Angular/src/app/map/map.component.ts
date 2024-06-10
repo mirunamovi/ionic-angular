@@ -1,8 +1,11 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Track } from '../ts/interfaces/track';
-import { Observable, firstValueFrom } from 'rxjs';
+import { Observable} from 'rxjs';
+import { File } from '@ionic-native/file/ngx';
+import { MapViewService } from './map.service';
+import { AlertController, Platform } from '@ionic/angular';
 
 declare const omnivore: any;
 
@@ -26,11 +29,18 @@ export class MapComponent implements OnInit {
   // url = 'http://localhost:4000/tracks/'
   url = 'http://mimovi.go.ro:4000/tracks/';
 
+  isToastOpen: boolean = false;
+  toastMessage = 'Welcome to PeakGeek';
+
   @Output() distance: any;
   @Output() duration: any;
 
-  constructor(private http: HttpClient,
-              private route: ActivatedRoute) { }
+  constructor(public platform: Platform, 
+              public alertCtrl: AlertController,
+              private route: ActivatedRoute, 
+              private file: File,
+              private mapViewService: MapViewService,
+              private router: Router) { }
 
   activity?: Track;
   activityTitle?: string;
@@ -60,12 +70,8 @@ export class MapComponent implements OnInit {
     console.log('Duration:', this.duration);
   }
 
-  getTrack(trackId: string | null): Observable<Track> {
-    return this.http.get<Track>(`${this.url}${trackId}`);
-  }
-
   async getActivity(trackId: string) {
-    this.getTrack(trackId).subscribe({
+    this.mapViewService.getTrack(trackId, this.url).subscribe({
       next: (track) => {
         if (!track) {
           console.error('Track data is null or undefined');
@@ -75,6 +81,7 @@ export class MapComponent implements OnInit {
         this.activity = track;
         this.activityTitle = this.activity.title;
         this.activityFileName = this.activity.fileName;
+        console.log("activityFileName: " + this.activityFileName);
         this.activityDate = this.activity.createdAt;
         this.gpxUrl = "http://mimovi.go.ro:4000/uploads/" + this.activityFileName;
 
@@ -85,4 +92,73 @@ export class MapComponent implements OnInit {
       }
     });
   }
+
+  async deleteRecording(): Promise<void> {
+    this.mapViewService.deleteTrackfromStorage(this.activityFileName).subscribe((res) => {
+      this.mapViewService.deleteTrackfromDb(this.trackId, this.url).subscribe(( )=> {
+        this.router.navigate(['/home']);
+      });
+      this.setOpen(true);
+      this.toastMessage = 'Delete Successfully.';
+    });
+    
+  }
+
+
+  
+
+  downloadGPX() {
+    if (this.platform.is('cordova')) {
+      this.downloadGPXForMobile();
+    } else {
+      this.downloadGPXForDesktop();
+    }
+  }
+
+  downloadGPXForMobile() {
+    const folderName = 'PeakGeek';
+    const downloadPath = this.file.externalRootDirectory + "/Download/";
+    const filePath = downloadPath + folderName + '/';
+
+    this.file.checkDir(downloadPath, folderName).catch(() => {
+      return this.file.createDir(downloadPath, folderName, false);
+    }).then(() => {
+      this.mapViewService.getGpxFileBlob(this.gpxUrl).subscribe(blob => {
+        this.file.writeFile(filePath, `${this.activityTitle}.gpx`, blob, { replace: true })
+          .then(() => {
+            console.log('GPX file saved successfully.');
+            this.setOpen(true);
+            this.toastMessage = 'GPX file saved successfully.';
+          })
+          .catch(err => {
+            console.error('Error saving GPX file:', err);
+          });
+      });
+    }).catch(err => {
+      console.error('Error creating directory:', err);
+    });
+  }
+
+  downloadGPXForDesktop() {
+    this.mapViewService.getGpxFileBlob(this.gpxUrl).subscribe(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${this.activityTitle}.gpx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      this.setOpen(true);
+      this.toastMessage = 'GPX file downloaded successfully.';
+    }, err => {
+      console.error('Error downloading GPX file:', err);
+    });
+  }
+
+  setOpen(isOpen: boolean) {
+    this.isToastOpen = isOpen;
+  }
+
 }
