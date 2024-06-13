@@ -7,10 +7,13 @@ import {
   Output,
 } from '@angular/core';
 import 'leaflet-gpx';
-import { MapViewService } from '../map/map.service';
+import { MapService } from '../map/map.service';
 import Chart from 'chart.js/auto';
 import 'leaflet-fullscreen';
+import 'leaflet-simple-map-screenshoter';
 import { parseString } from 'xml2js';
+import { SimpleMapScreenshoter } from 'leaflet-simple-map-screenshoter';
+import { HttpClient } from '@angular/common/http';
 
 declare let L: any;
 
@@ -25,10 +28,30 @@ export class MapViewComponent implements AfterViewInit {
 
   @Output() distanceChange = new EventEmitter<any>();
   @Output() durationChange = new EventEmitter<any>();
+
   distance!: any;
   duration!: any;
+  simpleMapScreenshoter:any;
+  screenName:any;
+  isToastOpen: boolean = false;
+  toastMessage = 'Welcome to PeakGeek';
+  @Input() activityFileName?: string;
+  @Input() activityTitle?: string;
+  @Input() activityThumbnail?: string;
 
-  constructor(private mapViewService: MapViewService) {}
+  title: string = '';
+  fileName: string = '';
+  thumbnail : string | undefined = '';
+
+  constructor(private mapService: MapService, private http: HttpClient) {}
+  ngOnInit(): void {
+    // Initialize title and fileName here
+    if (this.activityTitle && this.activityFileName) {
+      this.title = this.activityTitle;
+      this.fileName = this.activityFileName;
+      this.thumbnail = this.activityThumbnail;
+    }
+  }
 
   ngAfterViewInit(): void {
     this.displayGpx();
@@ -55,8 +78,11 @@ export class MapViewComponent implements AfterViewInit {
     );
 
     const control = L.control.layers({}, {}).addTo(map); // Use empty objects instead of null
+    this.screenName = "Thumbnail-" +  this.activityFileName;
 
-    this.mapViewService.getGpxFile(this.gpxUrl).subscribe((gpxData: string) => {
+    this.simpleMapScreenshoter = L.simpleMapScreenshoter({screenName: this.screenName}).addTo(map);
+    
+    this.mapService.getGpxFile(this.gpxUrl).subscribe((gpxData: string) => {
       const gpx = new L.GPX(gpxData, {
         async: true,
         marker_options: {
@@ -70,69 +96,140 @@ export class MapViewComponent implements AfterViewInit {
           map.fitBounds(gpx.getBounds());
           control.addOverlay(gpx, gpx.get_name());
           this.distance = gpx.get_distance_imp().toFixed(2);
-          console.log('distance: ' + this.distance);
           this.duration = gpx.get_duration_string(gpx.get_moving_time());
-          console.log('duration: ' + this.duration);
           this.distanceChange.emit(this.distance);
           this.durationChange.emit(this.duration);
-         this.parseAndCreateChart(gpx._gpx);
+          this.parseAndCreateChart(gpx._gpx);
+          console.log("this.fileName: " + this.fileName);
+          if(this.activityThumbnail === ''){
+            this.attachScreenshotListener();
+          }
+
         })
         .addTo(map);
     });
   }
 
-  haversineDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  attachScreenshotListener() {
+    if (!this.simpleMapScreenshoter) {
+      console.error('SimpleMapScreenshoter plugin is not initialized.');
+      return;
+    }
+
+    // Listen for the screenshot event
+      this.simpleMapScreenshoter.takeScreen('blob').then((res: BlobPart) => {
+        const blob = new Blob([res], { type: 'image/png' });
+  
+        const formData = new FormData();
+        formData.append('title', this.title);
+        formData.append('fileName', this.fileName);
+        formData.append('file', blob, `${this.screenName}.png`);
+  
+        this.http.post('http://mimovi.go.ro:4000/tracks/upload', formData).subscribe(
+          (res) => {
+            console.log(res);
+            this.setOpen(true);
+            this.toastMessage = 'Uploaded Thumbnail Successfully.';
+          },
+          (error) => {
+            console.error('Error uploading thumbnail:', error);
+          }
+        );
+      });
+  }
+
+  // takeScreenshotAndUpload(): void {
+  //   if (!this.simpleMapScreenshoter || !this.title || !this.fileName) {
+  //     console.error('Missing required data for screenshot and upload.');
+  //     return;
+  //   }
+
+  //   this.simpleMapScreenshoter.takeScreen('blob').then((res: BlobPart) => {
+  //     const blob = new Blob([res], { type: 'image/png' });
+
+  //     const formData = new FormData();
+  //     formData.append('title', this.title);
+  //     formData.append('fileName', this.fileName);
+  //     formData.append('file', blob, `${this.screenName}.png`);
+
+  //     this.http.post('http://mimovi.go.ro:4000/tracks/upload', formData).subscribe(
+  //       (res) => {
+  //         console.log(res);
+  //         this.setOpen(true);
+  //         this.toastMessage = 'Uploaded Thumbnail Successfully.';
+  //       },
+  //       (error) => {
+  //         console.error('Error uploading thumbnail:', error);
+  //       }
+  //     );
+  //   });
+  // }
+
+
+  haversineDistance(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number
+  ): number {
     const R = 6371; // Radius of the Earth in km
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
     const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) *
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c; // Distance in km
     return distance;
-}
+  }
 
-calculateCumulativeDistances(data: any[]): number[] {
+  calculateCumulativeDistances(data: any[]): number[] {
     let cumulativeDistance = 0;
     const cumulativeDistances: number[] = [];
 
     for (let i = 1; i < data.length; i++) {
-        const distance = this.haversineDistance(data[i - 1].lat, data[i - 1].lon, data[i].lat, data[i].lon);
-        cumulativeDistance += distance;
-        cumulativeDistances.push(cumulativeDistance);
+      const distance = this.haversineDistance(
+        data[i - 1].lat,
+        data[i - 1].lon,
+        data[i].lat,
+        data[i].lon
+      );
+      cumulativeDistance += distance;
+      cumulativeDistances.push(cumulativeDistance);
     }
 
     return cumulativeDistances;
-}
+  }
 
   parseAndCreateChart(gpxData: string): void {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(gpxData, 'text/xml');
-  
+
     const routePoints = xmlDoc.querySelectorAll('rtept');
     const data = Array.from(routePoints).map((point: Element) => {
       const lat = parseFloat(point.getAttribute('lat') || '0');
       const lon = parseFloat(point.getAttribute('lon') || '0');
       let ele = null;
       let time = null;
-  
+
       const eleElement = point.querySelector('ele');
       if (eleElement) {
         ele = parseFloat(eleElement.textContent || '0');
       }
-  
+
       const timeElement = point.querySelector('time');
       if (timeElement) {
         time = timeElement.textContent || '';
       }
-  
+
       return {
         lat: lat,
         lon: lon,
         ele: ele,
-        time: time
+        time: time,
       };
     });
     const cumulativeDistances = this.calculateCumulativeDistances(data);
@@ -141,43 +238,48 @@ calculateCumulativeDistances(data: any[]): number[] {
 
   createChart(data: any[], distances: any[]): void {
     const ctx = document.getElementById('elevationChart') as HTMLCanvasElement;
-    const elevations = data.map((pt) => pt.ele); 
-
+    const elevations = data.map((pt) => pt.ele);
 
     new Chart(ctx, {
       type: 'line',
       data: {
         labels: distances,
-        datasets: [{
+        datasets: [
+          {
             label: 'Elevation (m)',
             data: elevations,
-            borderColor:'green',
+            borderColor: 'green',
             // borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 0.5,
             pointRadius: 1,
             fill: false,
-        }]
-    },
-    options: {
-      responsive: true, // Make the chart responsive
-      maintainAspectRatio: false, // Allow the aspect ratio to change
-      scales: {
+          },
+        ],
+      },
+      options: {
+        responsive: true, // Make the chart responsive
+        maintainAspectRatio: false, // Allow the aspect ratio to change
+        scales: {
           x: {
-              type: 'linear',
-              title: {
-                  display: true,
-                  text: 'Cumulative Distance (km)'
-              }
+            type: 'linear',
+            title: {
+              display: true,
+              text: 'Cumulative Distance (km)',
+            },
           },
           y: {
             title: {
-                  display: true,
-                  text: 'Elevation (m)'
-              }
-          }
-      }
-  }
+              display: true,
+              text: 'Elevation (m)',
+            },
+          },
+        },
+      },
     });
   }
 
+
+  setOpen(isOpen: boolean) {
+    this.isToastOpen = isOpen;
+  }
 }

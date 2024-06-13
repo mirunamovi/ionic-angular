@@ -12,4 +12,6 @@ export interface Track {
   title: string;
   createdAt: Date;
   fileName: string;
+  thumbnail?: string;
+
 }

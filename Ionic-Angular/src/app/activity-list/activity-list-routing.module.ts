@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivityListComponent } from './activity-list.component';
 import { RouterModule, Routes } from '@angular/router';
 import { MapComponent } from '../map/map.component';
+import { ThumbnailViewerComponent } from '../thumbnail-viewer/thumbnail-viewer.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ActivityListComponent,
+    component: ActivityListComponent
   },
   {
     path: 'activity/:trackId',

@@ -41,7 +41,8 @@
             ],
             "scripts": [
               "node_modules/leaflet/dist/leaflet.js",
-              "node_modules/leaflet-fullscreen/dist/Leaflet.fullscreen.min.js", 
+              "node_modules/leaflet-fullscreen/dist/Leaflet.fullscreen.min.js",
+              "node_modules/leaflet-simple-map-screenshoter/dist/leaflet-simple-map-screenshoter.js", 
               "src/assets/libs/leaflet/leaflet.js",
               "src/assets/libs/leaflet/gpx.js"
             ]

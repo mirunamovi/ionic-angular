@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Track } from '../ts/interfaces/track';
 import { Observable} from 'rxjs';
 import { File } from '@ionic-native/file/ngx';
-import { MapViewService } from './map.service';
+import { MapService } from './map.service';
 import { AlertController, Platform } from '@ionic/angular';
 
 declare const omnivore: any;
@@ -24,27 +24,29 @@ export class MapComponent implements OnInit {
 
   trackId: string| null = null;
   gpxData: any;
-  // url = 'http://192.168.0.109:4000/tracks/'
+  url = 'http://192.168.0.109:4000/tracks/'
   // url = 'http://192.168.46.213:4000/tracks/'
   // url = 'http://localhost:4000/tracks/'
-  url = 'http://mimovi.go.ro:4000/tracks/';
+  // url = 'http://mimovi.go.ro:4000/tracks/';
 
   isToastOpen: boolean = false;
   toastMessage = 'Welcome to PeakGeek';
 
   @Output() distance: any;
   @Output() duration: any;
+  activityThumbnail: any;
 
   constructor(public platform: Platform, 
               public alertCtrl: AlertController,
               private route: ActivatedRoute, 
               private file: File,
-              private mapViewService: MapViewService,
+              private mapService: MapService,
               private router: Router) { }
 
   activity?: Track;
   activityTitle?: string;
   activityFileName?: string;
+
   activityComments?: string;
   activityDate?: Date;
 
@@ -71,7 +73,7 @@ export class MapComponent implements OnInit {
   }
 
   async getActivity(trackId: string) {
-    this.mapViewService.getTrack(trackId, this.url).subscribe({
+    this.mapService.getTrack(trackId, this.url).subscribe({
       next: (track) => {
         if (!track) {
           console.error('Track data is null or undefined');
@@ -79,12 +81,15 @@ export class MapComponent implements OnInit {
         }
         console.log("am intrat in getActivity");
         this.activity = track;
+
         this.activityTitle = this.activity.title;
         this.activityFileName = this.activity.fileName;
-        console.log("activityFileName: " + this.activityFileName);
         this.activityDate = this.activity.createdAt;
-        this.gpxUrl = "http://mimovi.go.ro:4000/uploads/" + this.activityFileName;
+        this.activityThumbnail = this.activity.thumbnail;
+        // this.gpxUrl = "http://mimovi.go.ro:4000/uploads/" + this.activityFileName;
+        this.gpxUrl = "http://192.168.0.109:4000/uploads/" + this.activityFileName;
 
+        
         console.log("gpxUrl in map component " + this.gpxUrl);
       },
       error: (error) => {
@@ -94,8 +99,8 @@ export class MapComponent implements OnInit {
   }
 
   async deleteRecording(): Promise<void> {
-    this.mapViewService.deleteTrackfromStorage(this.activityFileName).subscribe((res) => {
-      this.mapViewService.deleteTrackfromDb(this.trackId, this.url).subscribe(( )=> {
+    this.mapService.deleteTrackfromStorage(this.activityFileName).subscribe((res) => {
+      this.mapService.deleteTrackfromDb(this.trackId, this.url).subscribe(( )=> {
         this.router.navigate(['/home']);
       });
       this.setOpen(true);
@@ -123,7 +128,7 @@ export class MapComponent implements OnInit {
     this.file.checkDir(downloadPath, folderName).catch(() => {
       return this.file.createDir(downloadPath, folderName, false);
     }).then(() => {
-      this.mapViewService.getGpxFileBlob(this.gpxUrl).subscribe(blob => {
+      this.mapService.getGpxFileBlob(this.gpxUrl).subscribe(blob => {
         this.file.writeFile(filePath, `${this.activityTitle}.gpx`, blob, { replace: true })
           .then(() => {
             console.log('GPX file saved successfully.');
@@ -140,7 +145,7 @@ export class MapComponent implements OnInit {
   }
 
   downloadGPXForDesktop() {
-    this.mapViewService.getGpxFileBlob(this.gpxUrl).subscribe(blob => {
+    this.mapService.getGpxFileBlob(this.gpxUrl).subscribe(blob => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

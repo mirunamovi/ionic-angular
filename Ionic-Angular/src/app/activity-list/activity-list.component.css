@@ -38,3 +38,16 @@ hr{
   color:#333;
   margin: 2px;
 }
+
+.card-placeholder{
+  display: flex;
+  flex-wrap: wrap;  /* flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+}
+
+ion-card{
+  max-width: 20vw;
+}
+
+

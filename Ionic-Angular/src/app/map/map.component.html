@@ -11,30 +11,9 @@
 <div class="row row-map">
   <!-- app.component.html -->
   <div *ngIf="gpxUrl">
-     <app-map-view [gpxUrl]= "gpxUrl" [mapId]="'map'" (distanceChange)="onDistanceChange($event)" 
+     <app-map-view [gpxUrl]= "gpxUrl" [mapId]="'map'" [activityFileName]="activityFileName" [activityTitle]="activityTitle" [activityThumbnail]="activityThumbnail" (distanceChange)="onDistanceChange($event)" 
      (durationChange)="onDurationChange($event)"></app-map-view>
   </div>
-  <!-- <div class="col-md-3 info-container">
-    <div id="run-info">
-      <h2 class="heading">Run Data</h2>
-      <hr/>
-      <div class="data-heading">Route Name:</div>
-      <p class="data-entry">{{ activityTitle }}</p>
-      <hr/>
-
-      <div class="data-heading">Date:</div>
-      <p class="data-entry">{{ activityDate | date:"yyyy-MM-dd" }} <p>
-      <hr/>
-
-      <div class="data-heading">Total Distance:</div>
-      <p class="data-entry">{{ distance }} miles</p>
-      <hr/>
-
-      <div class="data-heading">Duration:</div>
-      <p class="data-entry">{{ duration }}</p>
-      <hr/>
-    </div>
-  </div> -->
   <div class="ion-padding">
     <ion-grid>
       <ion-row>

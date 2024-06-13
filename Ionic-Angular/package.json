@@ -57,6 +57,7 @@
     "leaflet": "^1.9.4",
     "leaflet-fullscreen": "^1.0.2",
     "leaflet-gpx": "^1.7.0",
+    "leaflet-simple-map-screenshoter": "^0.5.0",
     "leaflet.elevation": "^0.0.3",
     "rxjs": "~7.8.0",
     "togpx": "^0.5.4",

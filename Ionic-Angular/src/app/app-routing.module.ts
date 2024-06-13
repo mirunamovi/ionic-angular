@@ -33,6 +33,13 @@ const routes: Routes = [
         (m) => m.MapRecorderModule
       ),
   },
+  {
+    path: 'forgot-password',
+    loadChildren: () =>
+      import('src/app/forgot-password/forgot-password.module').then(
+        (m) => m.ForgotPasswordModule
+      ),
+  },
 
   { path: '**', redirectTo: '' }
 ];

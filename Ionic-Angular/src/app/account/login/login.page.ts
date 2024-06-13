@@ -122,6 +122,10 @@ export class LoginPage extends NetworkAwareHandler {
     this.router.navigate(['/record']).then(() => console.log("merge")).catch(() => console.log("nu merge"));
   }
 
+  forgotPassword() {
+    this.router.navigate(['/forgot-password'])
+  }
+
   setOpen(isOpen: boolean) {
     this.isToastOpen = isOpen;
   }

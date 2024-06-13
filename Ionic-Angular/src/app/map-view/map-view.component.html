@@ -4,6 +4,14 @@
   <canvas id="elevationChart"></canvas>
 </div>
 
+
+<ion-toast
+[isOpen]="isToastOpen"
+message="{{toastMessage}}"
+[duration]="4000"
+(didDismiss)="setOpen(false)"
+></ion-toast>
+
 <!-- <h3></h3>
 <div class="start"></div>
 <div class="distance">distance </div>

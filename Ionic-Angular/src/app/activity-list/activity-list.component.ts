@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivityListService } from './activity-list.service';
 import { Track} from '../ts/interfaces/track';
 import { Router } from '@angular/router';
+import { ThumbnailService } from '../thumbnail-viewer/thumbnail.service';
 
 @Component({
   selector: 'app-activity-list',
@@ -13,7 +14,7 @@ export class ActivityListComponent implements OnInit {
   activities?: Track[];
 
 
-  constructor(private activityListService: ActivityListService, private router: Router) { }
+  constructor(private activityListService: ActivityListService, private router: Router, private thumbnailService: ThumbnailService) { }
 
  async ngOnInit() {
 
@@ -22,7 +23,12 @@ export class ActivityListComponent implements OnInit {
     );
 
     const ids = this.activities?.map(activity => activity._id);
-    console.log(ids); // Log the array of IDs
+
+  }
+
+  getThumbnailFilename(activityTitle: string): string | undefined {
+    const activity = this.activities?.find(act => act.title === activityTitle);
+    return activity ? activity.thumbnail : '';
   }
   
 
@@ -32,7 +38,8 @@ export class ActivityListComponent implements OnInit {
     this.router.navigate(['home', 'activities', 'activity', trackId])
      .then(success => console.log('Navigation success:', success))
      .catch(err => console.error('Navigation error:', err));
-
   }
+
+
   
 }

@@ -25,8 +25,9 @@
   text-decoration: none;
 }
 
-ion-content.background{
-  --background: url(../../assets/eberhardgross.jpg) no-repeat center center / cover;
+ion-content {
+  --background: url('../../assets/eberhardgross.jpg') no-repeat center center / cover;
+  background: var(--background);
 }
 
 .glass-button {

@@ -6,7 +6,7 @@ import { Track } from '../ts/interfaces/track';
 @Injectable({
   providedIn: 'root',
 })
-export class MapViewService {
+export class MapService {
   constructor(private http: HttpClient) {}
 
   
@@ -16,7 +16,10 @@ export class MapViewService {
 
   deleteTrackfromStorage(fileName: string | undefined): Observable<any>  {
     console.log("fileName: " + fileName);
-    return this.http.delete(`http://mimovi.go.ro:4000/tracks/uploads/${fileName}`);
+    
+    return this.http.delete(`http://192.168.0.109:4000/tracks/uploads/${fileName}`);
+
+    // return this.http.delete(`http://mimovi.go.ro:4000/tracks/uploads/${fileName}`);
   } 
   
   deleteTrackfromDb(trackId: string | null, url: string): Observable<Track> {

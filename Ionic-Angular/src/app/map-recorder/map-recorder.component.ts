@@ -59,8 +59,8 @@ export class MapRecorderComponent extends NetworkAwareHandler {
   altitude?: number | null;
   showSaveButton: boolean = false;
 
-  url = 'http://mimovi.go.ro:4000/uploads/';
-  // url = 'http://192.168.46.213:4000/tracks/'
+  // url = 'http://mimovi.go.ro:4000/uploads/';
+  url = 'http://192.168.0.109:4000/tracks/'
   // url = 'http://localhost:4000/tracks/'
 
   private destroyed = false;
@@ -134,7 +134,6 @@ export class MapRecorderComponent extends NetworkAwareHandler {
       center: [43.0, 22.0],
       zoom: 15,
     });
-    // L.control.fullscreen().addTo(this.map);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
@@ -152,10 +151,6 @@ export class MapRecorderComponent extends NetworkAwareHandler {
       titleCancel: 'Exit fullscreen mode',
       forceSeparateButton: true
     }));
-
-    // setTimeout(() => {
-    //   this.map.invalidateSize();
-    // }, 800);
 
     this.map.locate({
       watch: true, // Continuously update the user's location

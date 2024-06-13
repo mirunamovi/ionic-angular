@@ -1,42 +1,39 @@
-<ion-content [fullscreen]="true">
-<!-- 
-<ion-header class="ion-app-login-header"> -->
-  <ion-avatar  class="ion-app-logo">
-    <img alt="Tracking application logo" src="assets/peak.png" />
-  </ion-avatar>
-<!-- </ion-header> -->
+<ion-content [fullscreen]="true" class="ion-content-background">
+  <div class="login-wrapper">
+    <ion-card class="login-card">
+      <ion-avatar class="ion-app-logo">
+        <img alt="Tracking application logo" src="assets/peak.png" />
+      </ion-avatar>
 
-<div class="container">
-  <h1 class="heading">PeakGeek<br><br></h1>
-  <form [formGroup]="loginFormGroup">
-    <ion-item lines="none" class="ion-item">
-      <fieldset class="input-item">
-        <legend>Email</legend> 
-        <ion-input formControlName="email" type="text" placeholder="email"></ion-input>
-      </fieldset>
-    </ion-item>
-    <ion-item lines="none" class="ion-item">
-      <fieldset class="input-item">
-        <legend>Password</legend> 
-        <ion-input formControlName="password" type="password" placeholder="*******"></ion-input>
-      </fieldset>
-    </ion-item>
-    <!-- <p class="forget-text"><a (click)="change('forget')">Forgot Password</a></p> -->
-    <p class="forget-text"><a>Forgot Password</a></p>
-    <p class="forget-text"><a (click)="moveToRecorder()">Use App Offline</a></p>
-    <p class="signup-text" >I'm a new user&nbsp;<a (click)="moveToRegister()">Sign Up</a></p>
-    <ion-button class="login-button" (click)="login()"  id="open-loading" expand="block">Login</ion-button>
-    <hr/>
-  </form>
+      <div class="container">
+        <h1 class="heading">PeakGeek<br></h1>
+        <form [formGroup]="loginFormGroup">
+          <ion-item lines="none" class="ion-item">
+            <fieldset class="input-item">
+              <legend>Email</legend> 
+              <ion-input formControlName="email" type="text" placeholder=""></ion-input>
+            </fieldset>
+          </ion-item>
+          <ion-item lines="none" class="ion-item">
+            <fieldset class="input-item">
+              <legend>Password</legend> 
+              <ion-input formControlName="password" type="password" placeholder="*******************"></ion-input>
+            </fieldset>
+          </ion-item>
+          <p class="forget-text"><a (click)="forgotPassword()">Forgot Password</a></p>
+          <p class="forget-text"><a (click)="moveToRecorder()">Use App Offline</a></p>
+          <p class="signup-text">I'm a new user&nbsp;<a (click)="moveToRegister()">Sign Up   &nbsp; &nbsp;      </a></p>
+          <ion-button class="login-button" (click)="login()" id="open-loading" expand="block">Login</ion-button>
+          <hr/>
+        </form>
 
-  <ion-toast
-  [isOpen]="isToastOpen"
-  message="{{toastMessage}}"
-  [duration]="4000"
-  (didDismiss)="setOpen(false)"
-></ion-toast>
-
-</div> 
-
-
-<ion-content />
+        <ion-toast
+          [isOpen]="isToastOpen"
+          message="{{toastMessage}}"
+          [duration]="4000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast>
+      </div>
+    </ion-card>
+  </div>
+</ion-content>

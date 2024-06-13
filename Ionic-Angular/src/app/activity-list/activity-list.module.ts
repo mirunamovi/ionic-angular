@@ -7,6 +7,7 @@ import { HTTP_INTERCEPTORS} from '@angular/common/http';
 import { AuthInterceptor } from '../auth/auth.interceptor';
 import { CardComponent } from '../card/card.component';
 import { RouterModule } from '@angular/router';
+import { ThumbnailViewerComponent } from '../thumbnail-viewer/thumbnail-viewer.component';
 
 
 
@@ -17,7 +18,7 @@ import { RouterModule } from '@angular/router';
     RouterModule,
     ActivityListRoutingModule
   ],
-  declarations: [ActivityListComponent, CardComponent],
+  declarations: [ActivityListComponent, CardComponent, ThumbnailViewerComponent],
   providers: [ 
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],

@@ -10,8 +10,8 @@ import { catchError, tap } from 'rxjs';
 })
 export class UploadTracksComponent implements OnInit {
 
-  // url = "http://192.168.0.109:4000/tracks/upload";
-  url = "http://mimovi.go.ro:4000/tracks/upload";
+  url = "http://192.168.0.109:4000/tracks/upload";
+  // url = "http://mimovi.go.ro:4000/tracks/upload";
 
   error: string = '';
   isLoading: boolean = false;
