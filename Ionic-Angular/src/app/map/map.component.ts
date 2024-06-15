@@ -34,6 +34,8 @@ export class MapComponent implements OnInit {
 
   @Output() distance: any;
   @Output() duration: any;
+  @Output() speed: any;
+
   activityThumbnail: any;
 
   constructor(public platform: Platform, 
@@ -72,6 +74,11 @@ export class MapComponent implements OnInit {
     console.log('Duration:', this.duration);
   }
 
+  onSpeedChange(newSpeed: any) {
+    this.speed = newSpeed;
+    console.log('Speed:', this.speed);
+  }
+
   async getActivity(trackId: string) {
     this.mapService.getTrack(trackId, this.url).subscribe({
       next: (track) => {
@@ -99,10 +106,9 @@ export class MapComponent implements OnInit {
   }
 
   async deleteRecording(): Promise<void> {
-    this.mapService.deleteTrackfromStorage(this.activityFileName).subscribe((res) => {
-      this.mapService.deleteTrackfromDb(this.trackId, this.url).subscribe(( )=> {
-        this.router.navigate(['/home']);
-      });
+    this.mapService.deleteTrackfromDb(this.trackId, this.url).subscribe((res) => {
+      this.router.navigate(['/home']);
+      this.mapService.deleteTrackfromDb(this.trackId, this.url).subscribe();
       this.setOpen(true);
       this.toastMessage = 'Delete Successfully.';
     });

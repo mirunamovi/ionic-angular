@@ -5,7 +5,6 @@ import { ActivityListComponent } from './activity-list.component';
 import { IonicModule } from '@ionic/angular';
 import { HTTP_INTERCEPTORS} from '@angular/common/http';
 import { AuthInterceptor } from '../auth/auth.interceptor';
-import { CardComponent } from '../card/card.component';
 import { RouterModule } from '@angular/router';
 import { ThumbnailViewerComponent } from '../thumbnail-viewer/thumbnail-viewer.component';
 
@@ -18,7 +17,7 @@ import { ThumbnailViewerComponent } from '../thumbnail-viewer/thumbnail-viewer.c
     RouterModule,
     ActivityListRoutingModule
   ],
-  declarations: [ActivityListComponent, CardComponent, ThumbnailViewerComponent],
+  declarations: [ActivityListComponent, ThumbnailViewerComponent],
   providers: [ 
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],

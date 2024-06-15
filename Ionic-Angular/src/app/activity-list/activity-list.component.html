@@ -3,49 +3,17 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Title</ion-title>
+    <ion-title>Your Tracks</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <!-- <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Date</th>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let activity of activities">
-        <td>
-          <a (click)="goToMap(activity._id)" expand="block">
-            {{ activity.title }}
-          </a>
-        </td>
-        <td>{{ activity.createdAt | date:"yyyy-MM-dd"}}</td>
-      </tr>
-    </tbody>
-  </table> -->
-
-  <h1>Category</h1>
-  <div *ngFor="let activity of activities">
-    <div class="card-placeholder">
-      <ion-card button="true" (click)="goToMap(activity._id)">
+<ion-content [fullscreen]="true" class="ion-content-background">
+      <ion-card button="true" (click)="goToMap(activity._id)" *ngFor="let activity of activities">
+        <app-thumbnail-viewer [thumbnail]="getThumbnailFilename(activity.title)"></app-thumbnail-viewer>
         <ion-card-header>
-          <ion-card-title>
-            <span class="card-title">{{activity.title}}</span>
-          </ion-card-title>
+          <ion-card-title>{{activity.title}}</ion-card-title>
+          <ion-card-subtitle>{{ activity.createdAt | date:"yyyy-MM-dd"}}</ion-card-subtitle>
         </ion-card-header>
-        <ion-card-content>
-          <app-thumbnail-viewer [thumbnail]="getThumbnailFilename(activity.title)"></app-thumbnail-viewer>
-          <p>{{ activity.createdAt | date:"yyyy-MM-dd"}}</p>
-        </ion-card-content>
       </ion-card>
-    </div>
-
-  
-  </div>
-
-
 </ion-content>
 

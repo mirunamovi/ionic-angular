@@ -3,21 +3,27 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>View the track</ion-title>
+    <ion-title>{{ activityTitle }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" scroll-y="true">
 <div class="row row-map">
-  <!-- app.component.html -->
   <div *ngIf="gpxUrl">
-     <app-map-view [gpxUrl]= "gpxUrl" [mapId]="'map'" [activityFileName]="activityFileName" [activityTitle]="activityTitle" [activityThumbnail]="activityThumbnail" (distanceChange)="onDistanceChange($event)" 
-     (durationChange)="onDurationChange($event)"></app-map-view>
+     <app-map-view 
+     [gpxUrl]= "gpxUrl" 
+     [mapId]="'map'" 
+     [activityFileName]="activityFileName" 
+     [activityTitle]="activityTitle" 
+     [activityThumbnail]="activityThumbnail" 
+     (distanceChange)="onDistanceChange($event)" 
+     (durationChange)="onDurationChange($event)" 
+     (speedChange)="onSpeedChange($event)"></app-map-view>
   </div>
   <div class="ion-padding">
     <ion-grid>
       <ion-row>
-        <ion-col size="12" size-md="6" size-lg="3" class="info-box">
+        <ion-col size="8" size-md="4" size-lg="3" class="info-box">
           <ion-card>
             <ion-card-header>
               <ion-card-title>Route Name</ion-card-title>
@@ -27,7 +33,7 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-col size="12" size-md="6" size-lg="3" class="info-box">
+        <ion-col size="8" size-md="4" size-lg="2" class="info-box">
           <ion-card>
             <ion-card-header>
               <ion-card-title>Date</ion-card-title>
@@ -37,7 +43,7 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-col size="12" size-md="6" size-lg="3" class="info-box">
+        <ion-col size="8" size-md="4" size-lg="2" class="info-box">
           <ion-card>
             <ion-card-header>
               <ion-card-title>Total Distance</ion-card-title>
@@ -47,7 +53,7 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-col size="12" size-md="6" size-lg="3" class="info-box">
+        <ion-col size="8" size-md="4" size-lg="2" class="info-box">
           <ion-card>
             <ion-card-header>
               <ion-card-title>Duration</ion-card-title>
@@ -57,11 +63,21 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
+        <ion-col size="8" size-md="4" size-lg="2" class="info-box">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Speed</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              {{ speed }} km/h
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
       </ion-row>
     </ion-grid>
   </div>
-  <button (click)="downloadGPX()">Download GPX</button>
-  <button (click)="deleteRecording()">Delete GPX</button>
+  <ion-button (click)="downloadGPX()">Download GPX</ion-button>
+  <ion-button (click)="deleteRecording()">Delete GPX</ion-button>
 
   <ion-toast
   [isOpen]="isToastOpen"

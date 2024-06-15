@@ -8,26 +8,41 @@
 </ion-header>
 
 
-<ion-content [fullscreen]="true" color="dark" padding>
-    <form [formGroup]="uploadFormGroup">
-      <ion-item>
-        <ion-label position="floating">Title</ion-label>
-        <ion-input type="text" formControlName="title" name="title"></ion-input>
-      </ion-item>
-  
-      <ion-item>
-        <ion-label>Upload File</ion-label>
-        <input type="file" (change)="onFileChange($event)" />
-      </ion-item>
-  
-      <ion-button expand="block" type="submit" (click)="submit()">Submit</ion-button>
-    </form>
+<ion-content [fullscreen]="true" class="ion-content-background">
+  <div class="login-wrapper">
+  <ion-card class="login-card">
+    <ion-avatar class="ion-app-logo">
+      <img alt="Tracking application logo" src="assets/peak.png" />
+    </ion-avatar>
 
+    <div class="container">
+      <h1>Upload your track!</h1>
+    <form [formGroup]="uploadFormGroup">
+      <ion-item lines="none" class="ion-item">
+        <fieldset class="input-item">
+        <legend>Title</legend> 
+        <ion-input type="text" formControlName="title" name="title"></ion-input>
+      </fieldset>
+      </ion-item>
+  
+      <ion-item lines="none" class="ion-item">
+        <fieldset class="input-item">
+        <input type="file" (change)="onFileChange($event)" />
+      </fieldset>
+      </ion-item>
+  
+      <ion-button class="login-button" expand="block" type="submit" (click)="submit()">Submit</ion-button>
+    </form>
+  
 <ion-toast
   [isOpen]="isToastOpen"
   message="{{toastMessage}}"
   [duration]="4000"
   (didDismiss)="setOpen(false)"
 ></ion-toast>
+</div>
+</ion-card>
 
-<ion-content />
+</div>
+
+</ion-content>

@@ -6,7 +6,6 @@
       </ion-avatar>
 
       <div class="container">
-        <!-- <h1 class="heading">Create Account<br><br></h1> -->
         <h1>Sign up to get started!</h1>
         <form [formGroup]="registerFormGroup">
           <ion-item lines="none" class="ion-item">
@@ -56,14 +55,13 @@
             >Sign Up</ion-button
           >
         </form>
-      </div>
-
       <ion-toast
         [isOpen]="isToastOpen"
         message="{{toastMessage}}"
         [duration]="4000"
         (didDismiss)="setOpen(false)"
       ></ion-toast>
+    </div>
     </ion-card>
   </div>
-  <ion-content/>
+</ion-content>

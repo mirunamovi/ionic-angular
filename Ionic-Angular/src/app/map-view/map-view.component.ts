@@ -28,9 +28,12 @@ export class MapViewComponent implements AfterViewInit {
 
   @Output() distanceChange = new EventEmitter<any>();
   @Output() durationChange = new EventEmitter<any>();
-
+  @Output() speedChange = new EventEmitter<any>();
+  
   distance!: any;
   duration!: any;
+  speed!: any;
+
   simpleMapScreenshoter:any;
   screenName:any;
   isToastOpen: boolean = false;
@@ -97,8 +100,12 @@ export class MapViewComponent implements AfterViewInit {
           control.addOverlay(gpx, gpx.get_name());
           this.distance = gpx.get_distance_imp().toFixed(2);
           this.duration = gpx.get_duration_string(gpx.get_moving_time());
+          this.speed = gpx.get_total_speed().toFixed(2);;
+          console.log(" this.speed: " +  this.speed);
           this.distanceChange.emit(this.distance);
           this.durationChange.emit(this.duration);
+          this.speedChange.emit(this.speed);
+
           this.parseAndCreateChart(gpx._gpx);
           console.log("this.fileName: " + this.fileName);
           if(this.activityThumbnail === ''){

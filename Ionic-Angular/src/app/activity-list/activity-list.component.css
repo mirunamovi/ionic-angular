@@ -39,15 +39,25 @@ hr{
   margin: 2px;
 }
 
-.card-placeholder{
-  display: flex;
-  flex-wrap: wrap;  /* flex-direction: column;
-  justify-content: center;
-  align-items: center; */
-}
-
 ion-card{
-  max-width: 20vw;
+width: 300px;
+display: inline-block;
 }
 
+ion-content.ion-content-background {
+  --background: url('../../assets/eberhardgross.jpg') no-repeat center center / cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+}
 
+@media (max-width: 600px) {
+  ion-card{
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  }
+}
