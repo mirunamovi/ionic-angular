@@ -154,4 +154,22 @@ form {
   .heading {
     margin: 10px 0; /* Adjust margin */
   }
+  input[type=file]::file-selector-button {
+    margin-right: 20px;
+    width: 100px;
+    height: 40px;
+    border: 2px solid var(--border-color);
+    background: var(--hover-button-background-color);
+    padding: 10px 10px;
+    border-radius: 5px;
+    color: var(--text-input-color);
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+  }
+  input[type=file] {
+    font-size: 0.7rem;
+
+  }
 }

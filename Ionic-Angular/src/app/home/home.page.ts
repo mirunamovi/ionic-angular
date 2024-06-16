@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AlertController, Platform } from '@ionic/angular';
-import { firstValueFrom, map } from 'rxjs';
+import { Subscription, firstValueFrom, map } from 'rxjs';
 import { UserInterface } from '../ts/interfaces';
 import { HomeService } from './home.service';
 import { NetworkAwareHandler} from '../NetworkAware/NetworkAware.directive';
@@ -13,7 +13,8 @@ import { AuthService } from '../auth/auth.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.css'],
 })
-export class HomePage extends NetworkAwareHandler{
+export class HomePage extends NetworkAwareHandler {
+  errorMessage: string = '';
 
   protected override onNetworkStatusChange(status: ConnectionStatus) {
     if (status === ConnectionStatus.Offline) {
@@ -36,6 +37,8 @@ export class HomePage extends NetworkAwareHandler{
   }
  
   name: any;
+  private subscription: Subscription = new Subscription();
+
   constructor(public platform: Platform, public alertCtrl: AlertController, private homeService: HomeService, networkService: NetworkService, private authService: AuthService) { 
     super(networkService);
     platform.ready().then(() => {
@@ -44,26 +47,42 @@ export class HomePage extends NetworkAwareHandler{
           this.presentExitConfirmation();
       });
     });
+    console.log("AM INTRAT IN CONSTRUCCTOR");
 }
   override async ngOnInit() {
     
     super.ngOnInit();
 
-    this.homeService.getUser().subscribe(
+
+  }
+  async ionViewWillEnter(){
+    const userSubscription = (await this.homeService.getUser()).subscribe(
       (user: UserInterface) => {
-        this.name = user.name;
+        if (user) {
+          this.name = user.name;
+        } else {
+          this.errorMessage = 'User data is invalid';
+        }
       },
       (error) => {
-        // Handle error if needed
-        console.error('Error occurred while fetching user:', error);
+        this.errorMessage = 'Error occurred while fetching user';
+        console.error(this.errorMessage, error);
       }
     );
 
+    this.subscription.add(userSubscription);
+
   } 
 
-  logout() {
+  override async ngOnDestroy(){
+    this.subscription.unsubscribe();
+    console.log('Component destroyed and subscriptions unsubscribed');
+  }
+
+logout() {
     this.authService.logout().subscribe(() => {
       console.log('User logged out');
+      this.ionViewDidLeave();
     });
   }
 
@@ -91,4 +110,9 @@ export class HomePage extends NetworkAwareHandler{
   });
   await (await alert).present();
 }
+
+ionViewDidLeave() {
+  this.name = '';
+}
+
 }

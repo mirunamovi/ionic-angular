@@ -23,6 +23,7 @@ export abstract class NetworkAwareHandler implements OnInit, OnDestroy {
       this.networkStatusSubscription.unsubscribe();
     }
   }
+
   protected abstract onNetworkStatusChange(status: ConnectionStatus): void;
 
 }

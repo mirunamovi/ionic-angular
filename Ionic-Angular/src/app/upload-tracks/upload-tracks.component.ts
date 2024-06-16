@@ -10,8 +10,8 @@ import { catchError, tap } from 'rxjs';
 })
 export class UploadTracksComponent implements OnInit {
 
-  url = "http://192.168.0.109:4000/tracks/upload";
-  // url = "http://mimovi.go.ro:4000/tracks/upload";
+  // url = "http://192.168.0.109:4000/tracks/upload";
+  url = "http://mimovi.go.ro:4000/tracks/upload";
 
   error: string = '';
   isLoading: boolean = false;
@@ -71,7 +71,7 @@ export class UploadTracksComponent implements OnInit {
       formData.append('file', fileControl.value);
     }
 
-      this.http.post(this.url, formData)
+      this.http.post("http://mimovi.go.ro:4000/tracks/uploadFile", formData)
       .subscribe(res => {
         console.log(res);
         this.toastMessage =

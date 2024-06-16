@@ -107,8 +107,7 @@ export class MapViewComponent implements AfterViewInit {
           this.speedChange.emit(this.speed);
 
           this.parseAndCreateChart(gpx._gpx);
-          console.log("this.fileName: " + this.fileName);
-          if(this.activityThumbnail === ''){
+          if(this.activityThumbnail === " "){
             this.attachScreenshotListener();
           }
 
@@ -144,33 +143,6 @@ export class MapViewComponent implements AfterViewInit {
         );
       });
   }
-
-  // takeScreenshotAndUpload(): void {
-  //   if (!this.simpleMapScreenshoter || !this.title || !this.fileName) {
-  //     console.error('Missing required data for screenshot and upload.');
-  //     return;
-  //   }
-
-  //   this.simpleMapScreenshoter.takeScreen('blob').then((res: BlobPart) => {
-  //     const blob = new Blob([res], { type: 'image/png' });
-
-  //     const formData = new FormData();
-  //     formData.append('title', this.title);
-  //     formData.append('fileName', this.fileName);
-  //     formData.append('file', blob, `${this.screenName}.png`);
-
-  //     this.http.post('http://mimovi.go.ro:4000/tracks/upload', formData).subscribe(
-  //       (res) => {
-  //         console.log(res);
-  //         this.setOpen(true);
-  //         this.toastMessage = 'Uploaded Thumbnail Successfully.';
-  //       },
-  //       (error) => {
-  //         console.error('Error uploading thumbnail:', error);
-  //       }
-  //     );
-  //   });
-  // }
 
 
   haversineDistance(

@@ -59,8 +59,8 @@ export class MapRecorderComponent extends NetworkAwareHandler {
   altitude?: number | null;
   showSaveButton: boolean = false;
 
-  // url = 'http://mimovi.go.ro:4000/uploads/';
-  url = 'http://192.168.0.109:4000/tracks/'
+  url = 'http://mimovi.go.ro:4000/uploads/';
+  // url = 'http://192.168.0.109:4000/tracks/'
   // url = 'http://localhost:4000/tracks/'
 
   private destroyed = false;
@@ -195,6 +195,11 @@ export class MapRecorderComponent extends NetworkAwareHandler {
 
     const folderName = 'PeakGeek';
     const title = this.fileName;
+    console.log("filename inainte de  join: "+ this.fileName);
+
+    const fileName = this.fileName.split(' ').join('_');
+    console.log("title: " + title);
+    console.log("filename dupa join: "+ fileName);
 
     const gpxData = await this.locationTracker.stopTracking();
     const blob = new Blob([gpxData], { type: 'application/gpx' }); // Assuming gpxContent is a string containing GPX data
@@ -228,7 +233,7 @@ export class MapRecorderComponent extends NetworkAwareHandler {
         });
 
       this.file
-        .writeFile(filePath, `${title}.gpx`, blob, { replace: true })
+        .writeFile(filePath, `${fileName}.gpx`, blob, { replace: true })
         .then((_) => {
           console.log('GPX file saved successfully.');
           this.setOpen(true);
@@ -241,7 +246,7 @@ export class MapRecorderComponent extends NetworkAwareHandler {
 
       const formData = new FormData();
       formData.append('title', title);
-      formData.append('file', blob, `${title}.gpx`);
+      formData.append('file', blob, `${fileName}.gpx`);
 
       this.http
             .post('http://mimovi.go.ro:4000/tracks/upload', formData)

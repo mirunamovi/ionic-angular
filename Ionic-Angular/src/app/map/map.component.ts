@@ -24,10 +24,10 @@ export class MapComponent implements OnInit {
 
   trackId: string| null = null;
   gpxData: any;
-  url = 'http://192.168.0.109:4000/tracks/'
+  // url = 'http://192.168.0.109:4000/tracks/'
   // url = 'http://192.168.46.213:4000/tracks/'
   // url = 'http://localhost:4000/tracks/'
-  // url = 'http://mimovi.go.ro:4000/tracks/';
+  url = 'http://mimovi.go.ro:4000/tracks/';
 
   isToastOpen: boolean = false;
   toastMessage = 'Welcome to PeakGeek';
@@ -48,7 +48,6 @@ export class MapComponent implements OnInit {
   activity?: Track;
   activityTitle?: string;
   activityFileName?: string;
-
   activityComments?: string;
   activityDate?: Date;
 
@@ -90,11 +89,14 @@ export class MapComponent implements OnInit {
         this.activity = track;
 
         this.activityTitle = this.activity.title;
+        console.log(" this.activityTitle: " + this.activityTitle)
         this.activityFileName = this.activity.fileName;
+        console.log("  this.activityFileName: " +  this.activityFileName)
+
         this.activityDate = this.activity.createdAt;
         this.activityThumbnail = this.activity.thumbnail;
-        // this.gpxUrl = "http://mimovi.go.ro:4000/uploads/" + this.activityFileName;
-        this.gpxUrl = "http://192.168.0.109:4000/uploads/" + this.activityFileName;
+        this.gpxUrl = "http://mimovi.go.ro:4000/uploads/" + this.activityFileName;
+        // this.gpxUrl = "http://192.168.0.109:4000/uploads/" + this.activityFileName;
 
         
         console.log("gpxUrl in map component " + this.gpxUrl);
@@ -108,7 +110,7 @@ export class MapComponent implements OnInit {
   async deleteRecording(): Promise<void> {
     this.mapService.deleteTrackfromDb(this.trackId, this.url).subscribe((res) => {
       this.router.navigate(['/home']);
-      this.mapService.deleteTrackfromDb(this.trackId, this.url).subscribe();
+      this.mapService.deleteTrackfromStorage(this.activityFileName).subscribe();
       this.setOpen(true);
       this.toastMessage = 'Delete Successfully.';
     });

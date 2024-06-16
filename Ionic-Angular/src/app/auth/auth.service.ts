@@ -18,8 +18,8 @@ export class AuthService {
   // private apiUrl = 'http://192.168.0.116:4000'; // Replace with your backend API URL
   // private apiUrl = 'http://localhost:4000'; // Replace with your backend API URL
   // private apiUrl = 'http://192.168.46.213:4000'; // Replace with your backend API URL
-  private apiUrl = 'http://192.168.0.109:4000'; // Replace with your backend API URL
-  // private apiUrl = 'http://mimovi.go.ro:4000'; // Replace with your backend API URL
+  // private apiUrl = 'http://192.168.0.109:4000'; // Replace with your backend API URL
+  private apiUrl = 'http://mimovi.go.ro:4000'; // Replace with your backend API URL
 
 
 
@@ -49,7 +49,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access-token');
     return !!token;
   }
 
@@ -77,14 +77,14 @@ export class AuthService {
   }
   
 
-  // getUserInfo(): Observable<UserInterface> {
-  //   return this.http.get<UserInterface>(ApiRoutes.UserInfo).pipe(
-  //     map((user: UserInterface) => {
-  //       this.authStore.setUserInfo(user);
-  //       return user;
-  //     })
-  //   );
-  // }
+  getUserInfo(): Observable<UserInterface> {
+    return this.http.get<UserInterface>(ApiRoutes.UserInfo).pipe(
+      map((user: UserInterface) => {
+        this.authStore.setUserInfo(user);
+        return user;
+      })
+    );
+  }
 
 
   refreshToken(): Observable<TokensInterface> {
