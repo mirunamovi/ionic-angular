@@ -17,6 +17,10 @@ export interface LoginInterface {
 export interface SignUpInterface{
   name: string;
   email: string;
-  password: string;
+  password: string
+}
 
+export interface ResetInterface{
+  email: string | null;
+  password: string
 }

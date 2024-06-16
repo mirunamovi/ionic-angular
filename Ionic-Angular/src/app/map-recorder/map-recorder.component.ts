@@ -57,6 +57,7 @@ export class MapRecorderComponent extends NetworkAwareHandler {
   latitude?: number;
   longitude?: number;
   altitude?: number | null;
+  speed? : number | null;
   showSaveButton: boolean = false;
 
   url = 'http://mimovi.go.ro:4000/uploads/';
@@ -112,7 +113,8 @@ export class MapRecorderComponent extends NetworkAwareHandler {
         if (!this.destroyed && !error && position !== null) {
           (this.latitude = position.coords.latitude),
             (this.longitude = position.coords.longitude),
-            (this.altitude = position.coords.altitude),
+            (this.altitude = position.coords.altitude !== null ? Math.round(position.coords.altitude * 10) / 10 : 0.0),
+            (this.speed = position.coords.speed !== null ? Math.round(position.coords.speed * 3.6 * 10) / 10 : 0.0),
             console.log(
               'New location received:',
               position.coords.latitude,
@@ -193,6 +195,7 @@ export class MapRecorderComponent extends NetworkAwareHandler {
     this.pause = false;
     this.map.stopLocate();
 
+    this.clearMap();
     const folderName = 'PeakGeek';
     const title = this.fileName;
     console.log("filename inainte de  join: "+ this.fileName);
@@ -338,5 +341,17 @@ export class MapRecorderComponent extends NetworkAwareHandler {
 
   setOpen(isOpen: boolean) {
     this.isToastOpen = isOpen;
+  }
+
+  clearMap(): void {
+    // Remove marker
+    if (this.marker) {
+      this.map.removeLayer(this.marker);
+    }
+
+    // Remove polyline
+    if (this.polyline) {
+      this.map.removeLayer(this.polyline);
+    }
   }
 }

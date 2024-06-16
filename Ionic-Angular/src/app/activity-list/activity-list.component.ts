@@ -17,7 +17,7 @@ export class ActivityListComponent implements OnInit {
   constructor(private activityListService: ActivityListService, private router: Router, private thumbnailService: ThumbnailService) { }
 
  async ngOnInit() {
-
+    console.log("ngOnInit in activity list is called");
     this.activityListService.getTracks().subscribe(
       (data: Track[] ) => this.activities = data
     );

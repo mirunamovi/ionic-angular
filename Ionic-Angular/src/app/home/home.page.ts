@@ -7,6 +7,7 @@ import { HomeService } from './home.service';
 import { NetworkAwareHandler} from '../NetworkAware/NetworkAware.directive';
 import { ConnectionStatus, NetworkService } from '../NetworkAware/network.service';
 import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -39,7 +40,7 @@ export class HomePage extends NetworkAwareHandler {
   name: any;
   private subscription: Subscription = new Subscription();
 
-  constructor(public platform: Platform, public alertCtrl: AlertController, private homeService: HomeService, networkService: NetworkService, private authService: AuthService) { 
+  constructor(public platform: Platform, public alertCtrl: AlertController, private homeService: HomeService, networkService: NetworkService, private authService: AuthService,  private router: Router) { 
     super(networkService);
     platform.ready().then(() => {
         // Check if the platform is ready before attempting to register the back button action
@@ -52,6 +53,7 @@ export class HomePage extends NetworkAwareHandler {
   override async ngOnInit() {
     
     super.ngOnInit();
+    this.loadUserFromSession();
 
 
   }
@@ -60,6 +62,8 @@ export class HomePage extends NetworkAwareHandler {
       (user: UserInterface) => {
         if (user) {
           this.name = user.name;
+          this.saveUserToSession(user);
+
         } else {
           this.errorMessage = 'User data is invalid';
         }
@@ -74,15 +78,29 @@ export class HomePage extends NetworkAwareHandler {
 
   } 
 
+  
   override async ngOnDestroy(){
     this.subscription.unsubscribe();
     console.log('Component destroyed and subscriptions unsubscribed');
   }
 
+  private saveUserToSession(user: UserInterface): void {
+    sessionStorage.setItem('user', JSON.stringify(user));
+  }
+
+  private loadUserFromSession(): void {
+    const userString = sessionStorage.getItem('user');
+    if (userString) {
+      const user: UserInterface = JSON.parse(userString);
+      this.name = user.name;
+    }
+  }
+
 logout() {
     this.authService.logout().subscribe(() => {
       console.log('User logged out');
-      this.ionViewDidLeave();
+      sessionStorage.removeItem('user');
+      // this.name = '';
     });
   }
 
@@ -111,8 +129,9 @@ logout() {
   await (await alert).present();
 }
 
-ionViewDidLeave() {
-  this.name = '';
-}
+ goToResetPassword(){
+   console.log("Vreau sa merg la register");
+    this.router.navigate(['reset']);
+ }
 
 }

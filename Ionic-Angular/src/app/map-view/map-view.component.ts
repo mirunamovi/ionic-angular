@@ -14,6 +14,9 @@ import 'leaflet-simple-map-screenshoter';
 import { parseString } from 'xml2js';
 import { SimpleMapScreenshoter } from 'leaflet-simple-map-screenshoter';
 import { HttpClient } from '@angular/common/http';
+import { File } from '@ionic-native/file/ngx';
+import { Platform } from '@ionic/angular';
+
 
 declare let L: any;
 
@@ -29,13 +32,13 @@ export class MapViewComponent implements AfterViewInit {
   @Output() distanceChange = new EventEmitter<any>();
   @Output() durationChange = new EventEmitter<any>();
   @Output() speedChange = new EventEmitter<any>();
-  
+
   distance!: any;
   duration!: any;
   speed!: any;
 
-  simpleMapScreenshoter:any;
-  screenName:any;
+  simpleMapScreenshoter: any;
+  screenName: any;
   isToastOpen: boolean = false;
   toastMessage = 'Welcome to PeakGeek';
   @Input() activityFileName?: string;
@@ -44,9 +47,14 @@ export class MapViewComponent implements AfterViewInit {
 
   title: string = '';
   fileName: string = '';
-  thumbnail : string | undefined = '';
+  thumbnail: string | undefined = '';
 
-  constructor(private mapService: MapService, private http: HttpClient) {}
+  constructor(
+    private mapService: MapService,
+    private http: HttpClient,
+    private file: File,
+    public platform: Platform
+  ) {}
   ngOnInit(): void {
     // Initialize title and fileName here
     if (this.activityTitle && this.activityFileName) {
@@ -81,10 +89,20 @@ export class MapViewComponent implements AfterViewInit {
     );
 
     const control = L.control.layers({}, {}).addTo(map); // Use empty objects instead of null
-    this.screenName = "Thumbnail-" +  this.activityFileName;
+    this.screenName = 'Thumbnail-' + this.activityFileName;
 
-    this.simpleMapScreenshoter = L.simpleMapScreenshoter({screenName: this.screenName}).addTo(map);
-    
+    if (this.platform.is('android')) {
+      this.simpleMapScreenshoter = L.simpleMapScreenshoter({
+        screenName: this.screenName,
+        preventDownload: true,
+        hidden: true,
+      }).addTo(map);
+    }
+    else{
+      this.simpleMapScreenshoter = L.simpleMapScreenshoter({
+        screenName: this.screenName,
+      }).addTo(map);
+    }
     this.mapService.getGpxFile(this.gpxUrl).subscribe((gpxData: string) => {
       const gpx = new L.GPX(gpxData, {
         async: true,
@@ -100,17 +118,18 @@ export class MapViewComponent implements AfterViewInit {
           control.addOverlay(gpx, gpx.get_name());
           this.distance = gpx.get_distance_imp().toFixed(2);
           this.duration = gpx.get_duration_string(gpx.get_moving_time());
-          this.speed = gpx.get_total_speed().toFixed(2);;
-          console.log(" this.speed: " +  this.speed);
+          this.speed = gpx.get_total_speed().toFixed(2);
+          console.log(' this.speed: ' + this.speed);
           this.distanceChange.emit(this.distance);
           this.durationChange.emit(this.duration);
           this.speedChange.emit(this.speed);
 
           this.parseAndCreateChart(gpx._gpx);
-          if(this.activityThumbnail === " "){
+          console.log("this.activityThumbnail: " + this.activityThumbnail);
+          if (this.activityThumbnail === "" ) {
+            console.log("am intrat in if (this.activityThumbnail ===  )");
             this.attachScreenshotListener();
           }
-
         })
         .addTo(map);
     });
@@ -121,9 +140,13 @@ export class MapViewComponent implements AfterViewInit {
       console.error('SimpleMapScreenshoter plugin is not initialized.');
       return;
     }
+    console.log('Attempting to take screenshot with simpleMapScreenshoter...');
+
 
     // Listen for the screenshot event
-      this.simpleMapScreenshoter.takeScreen('blob').then((res: BlobPart) => {
+    setTimeout(() => {
+      this.simpleMapScreenshoter.takeScreen('blob').then((res: Blob) => {
+        console.log("Entered simpleMapScreenshoter.takeScreen");
         const blob = new Blob([res], { type: 'image/png' });
   
         const formData = new FormData();
@@ -131,19 +154,23 @@ export class MapViewComponent implements AfterViewInit {
         formData.append('fileName', this.fileName);
         formData.append('file', blob, `${this.screenName}.png`);
   
-        this.http.post('http://mimovi.go.ro:4000/tracks/upload', formData).subscribe(
-          (res) => {
-            console.log(res);
-            this.setOpen(true);
-            this.toastMessage = 'Uploaded Thumbnail Successfully.';
-          },
-          (error) => {
-            console.error('Error uploading thumbnail:', error);
-          }
-        );
+        this.http
+          .post('http://mimovi.go.ro:4000/tracks/upload', formData)
+          .subscribe(
+            (res) => {
+              console.log(res);
+              this.setOpen(true);
+              this.toastMessage = 'Uploaded Thumbnail Successfully.';
+            },
+            (error) => {
+              console.error('Error uploading thumbnail:', error);
+            }
+          );
+      }).catch((error: any) => {
+        console.error('Error taking screenshot:', error);
       });
+    }, 4000); // Adjust timeout as necessary to ensure map is fully rendered
   }
-
 
   haversineDistance(
     lat1: number,
@@ -256,7 +283,6 @@ export class MapViewComponent implements AfterViewInit {
       },
     });
   }
-
 
   setOpen(isOpen: boolean) {
     this.isToastOpen = isOpen;

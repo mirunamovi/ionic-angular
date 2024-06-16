@@ -8,7 +8,7 @@ import { CredentialsInterface, LoginInterface, TokensInterface, UserInterface } 
 import { AuthStoreService } from './auth-store.service';
 import { ApiRoutes } from '../ts/enum/api-routes';
 import { AUTHORIZATION_HEADER_KEY, AUTHORIZATION_HEADER_PREFIX } from './interceptors/token.interceptor';
-import { SignUpInterface } from '../ts/interfaces/auth';
+import { ResetInterface, SignUpInterface } from '../ts/interfaces/auth';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -23,7 +23,7 @@ export class AuthService {
 
 
 
-  constructor(private http: HttpClient, private authStore: AuthStoreService, private router: Router,) { }
+  constructor(private http: HttpClient, private authStore: AuthStoreService, private router: Router) { }
 
   get hasAccessToken(): boolean {
     return !!this.authStore.accessToken;
@@ -101,8 +101,10 @@ export class AuthService {
   }
 
 
-  resetPassword(token: string, newPassword: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/reset-password`, { token, newPassword });
+  resetPassword(payload: ResetInterface): Observable<any> {
+    console.log("am intrat in authservice resetpassword");
+    console.log(payload);
+    return this.http.post(`${this.apiUrl}/forgot-password/reset-password`, payload);
   }
 
 

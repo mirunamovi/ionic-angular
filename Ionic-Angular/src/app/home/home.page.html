@@ -16,14 +16,15 @@
   </ion-header> -->
 
   <div class="container">
-    <ion-title size="large">Hi! {{ name }}</ion-title>
+    <ion-title size="">Hi! {{ name }}</ion-title>
      
-
     <nav id ="" class="navbar navbar-custom">
       <a routerLink="activities" class = "item"><p class="glass-button">Activity</p></a> 
       <a routerLink="record" class = "item"><p class="glass-button">Record</p></a> 
       <a routerLink="tracks/upload" class = "item"><p class="glass-button">Upload</p></a> 
       <button (click)="logout()" class="glass-button"> Logout</button>
+      <a routerLink="reset" class = "item"><p class="glass-button"> Reset Password</p></a> 
+
 
     </nav>
   </div>
