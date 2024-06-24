@@ -203,7 +203,7 @@ export class MapRecorderComponent extends NetworkAwareHandler {
     console.log("filename inainte de  join: "+ this.fileName);
 
     const uniqueSuffix = uuidv();
-    const fileName = this.fileName.split(' ').join('') + '' + uniqueSuffix;
+    const fileName = this.fileName.split(' ').join('') + '_' + uniqueSuffix;
 
     console.log("title: " + title);
     console.log("filename dupa join: "+ fileName);
