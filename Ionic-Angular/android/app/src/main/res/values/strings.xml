@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Ionic-Angular</string>
-    <string name="title_activity_main">Ionic-Angular</string>
+    <string name="app_name">PeakGeek</string>
+    <string name="title_activity_main">PeakGeek</string>
     <string name="package_name">io.ionic.starter</string>
     <string name="custom_url_scheme">io.ionic.starter</string>
    <!-- <string name="plugin_bgloc_account_name">Ionic-Angular</string>
    <string name="plugin_bgloc_account_type">io.ionic.starter.account</string>
    <string name="plugin_bgloc_content_authority">io.ionic.starter</string> -->
    <string name="mauron85_bgloc_content_authority">io.ionic.starter</string>
-   <string name="mauron85_bgloc_account_name">Ionic-Angular</string>
+   <string name="mauron85_bgloc_account_name">PeakGeek</string>
    <string name="mauron85_bgloc_account_type">io.ionic.starter.account</string>
 </resources>
