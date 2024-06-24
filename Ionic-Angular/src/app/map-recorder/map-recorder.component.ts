@@ -1,12 +1,9 @@
 import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 // import * as L from 'leaflet';
-import { AlertController } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { MapRecorderService } from './map-recorder.service';
-import {
-  Geolocation,
-  Position,
-} from '@capacitor/geolocation';
+import { Geolocation, Position } from '@capacitor/geolocation';
 import { File } from '@ionic-native/file/ngx';
 import { LocationTracker } from './bglocation-capacitor';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -16,6 +13,8 @@ import {
   NetworkService,
 } from '../NetworkAware/network.service';
 import 'leaflet-fullscreen';
+import { Router } from '@angular/router';
+import {v4 as uuidv} from 'uuid';
 
 
 declare const L: any;
@@ -61,7 +60,7 @@ export class MapRecorderComponent extends NetworkAwareHandler {
   showSaveButton: boolean = false;
 
   url = 'http://mimovi.go.ro:4000/uploads/';
-  // url = 'http://192.168.0.109:4000/tracks/'
+  // url = 'http://192.168.0.106:4000/uploads/'
   // url = 'http://localhost:4000/tracks/'
 
   private destroyed = false;
@@ -79,9 +78,11 @@ export class MapRecorderComponent extends NetworkAwareHandler {
   constructor(
     private alertController: AlertController,
     private http: HttpClient,
-    private mapRecorderService: MapRecorderService,
     private file: File,
-    networkService: NetworkService
+    networkService: NetworkService,
+    public platform: Platform,
+    private router: Router
+
   ) {
     super(networkService);
   }
@@ -147,6 +148,7 @@ export class MapRecorderComponent extends NetworkAwareHandler {
         this.map.invalidateSize();
       }, 1000);
     });
+
     this.map.addControl(new L.Control.Fullscreen({
       position: 'topleft',
       title: 'Show me the fullscreen!',
@@ -200,7 +202,9 @@ export class MapRecorderComponent extends NetworkAwareHandler {
     const title = this.fileName;
     console.log("filename inainte de  join: "+ this.fileName);
 
-    const fileName = this.fileName.split(' ').join('_');
+    const uniqueSuffix = uuidv();
+    const fileName = this.fileName.split(' ').join('') + '' + uniqueSuffix;
+
     console.log("title: " + title);
     console.log("filename dupa join: "+ fileName);
 
@@ -212,6 +216,7 @@ export class MapRecorderComponent extends NetworkAwareHandler {
       this.toastMessage = 'No Internet Connection. The Track will be saved in your filesystem.';
 
       const filePath = this.file.externalRootDirectory + "/Download/"+ folderName + '/'; // Add folder name to the path
+    //const filePath = this.file.externalRootDirectory + "/Download/"; 
 
       this.file
         .checkDir(this.file.externalRootDirectory + "/Download/", folderName)
@@ -250,9 +255,12 @@ export class MapRecorderComponent extends NetworkAwareHandler {
       const formData = new FormData();
       formData.append('title', title);
       formData.append('file', blob, `${fileName}.gpx`);
+      formData.append('fileName',  `${fileName}.gpx`);
 
       this.http
             .post('http://mimovi.go.ro:4000/tracks/upload', formData)
+    //        .post('http://192.168.0.106:4000/tracks/upload', formData)
+    //        .post('BACKEND_URI/tracks/upload', formData)
             .subscribe((res) => {
               console.log(res);
               this.setOpen(true);
@@ -352,6 +360,54 @@ export class MapRecorderComponent extends NetworkAwareHandler {
     // Remove polyline
     if (this.polyline) {
       this.map.removeLayer(this.polyline);
-    }
-  }
+    }
+  }
+    async exitMapRecording(): Promise<void> {
+      console.log("am intrat in exit");
+      if (this.recording  || (this.recording === false && this.pause === true)){
+          const alert = this.alertController.create({
+            header: 'Track Termination',
+            message: 'Do you want to close this Page without saving the Track?',
+            buttons: [{
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => {
+                    console.log('Application exit prevented!');
+                }
+            },{
+              text: 'Save Track',
+              handler: async () => {
+                  await this.saveGPX()
+                  if (this.platform.is('android')) {
+                    this.router.navigate(['/home']);
+                  } else {
+                      console.log('Exit app'); // Handle app closing for non-Cordova platforms
+                  }
+              }
+            },
+            {
+              text: 'Don\'t Save Track',
+              handler: async () => {
+                  if (this.platform.is('android')) {
+                    this.router.navigate(['/home']);
+                  } else {
+                      console.log('Exit app'); // Handle app closing for non-Cordova platforms
+                  }
+              }
+            }
+          ]
+          });
+          await (await alert).present();
+      }
+      else{
+          this.router.navigate(['/home']);
+         }
+        }
+
+
+
+
+
+
+
 }

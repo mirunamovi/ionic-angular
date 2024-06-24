@@ -15,18 +15,37 @@ export class ForgotPasswordComponent {
 
   constructor(private fb: FormBuilder, private forgotPasswordService: ForgotPasswordService) {
     this.forgotPasswordForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
+      passCode: ""
     });
   }
 
-  onSubmit() {
+  onSendMail() {
+    console.log("onSendMail");
     if (this.forgotPasswordForm.valid) {
       const email = this.forgotPasswordForm.value.email;
 
-      this.forgotPasswordService.forgotPassword(email).subscribe({
-        next: () => this.message = 'Password reset link sent to your email.',
+      this.forgotPasswordService.forgotPasswordSendEmail(email).subscribe({
+        next: () => this.message = 'Password reset code sent to your email.',
         error: (err) => this.error = err.error.message
       });
     }
   }
+  onSendCode() {
+    console.log("onSendCode");    
+    if (this.forgotPasswordForm.valid) {
+      const password = this.forgotPasswordForm.value.passCode.trim();
+      const email = this.forgotPasswordForm.value.email.trim();
+      console.log("onSendCode " + email + " " + password);
+      this.forgotPasswordService.forgotPasswordSubmitCode({ email, password }).subscribe({
+        next: () => this.message = 'Password code sent',
+        error: (err) => this.error = err.error.message
+      });
+    }
+  }
+
+
+
+
+
 }

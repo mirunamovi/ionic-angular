@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MapRecorderService } from '../map-recorder/map-recorder.service';
 import { catchError, tap } from 'rxjs';
+import {v4 as uuidv} from 'uuid';
+
 @Component({
   selector: 'app-upload-tracks',
   templateUrl: './upload-tracks.component.html',
@@ -68,7 +70,8 @@ export class UploadTracksComponent implements OnInit {
     const fileControl = this.uploadFormGroup.get('fileSource');
 
     if (fileControl?.value) {
-      formData.append('file', fileControl.value);
+      const uniqueSuffix = uuidv();
+      formData.append('file', fileControl.value + '_' + uniqueSuffix);
     }
 
       this.http.post("http://mimovi.go.ro:4000/tracks/uploadFile", formData)

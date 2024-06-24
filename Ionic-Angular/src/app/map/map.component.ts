@@ -48,6 +48,7 @@ export class MapComponent implements OnInit {
   activity?: Track;
   activityTitle?: string;
   activityFileName?: string;
+  trimFileName?: string;
   activityComments?: string;
   activityDate?: Date;
 
@@ -91,6 +92,12 @@ export class MapComponent implements OnInit {
         this.activityTitle = this.activity.title;
         console.log(" this.activityTitle: " + this.activityTitle)
         this.activityFileName = this.activity.fileName;
+        if(this.activityFileName.length > 40){
+          this.trimFileName = this.activityFileName.slice(0, -41) + ".gpx";
+        }
+        else {
+          this.trimFileName = this.activityFileName;
+        }
         console.log("  this.activityFileName: " +  this.activityFileName)
 
         this.activityDate = this.activity.createdAt;

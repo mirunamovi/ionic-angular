@@ -42,6 +42,8 @@ hr{
 ion-card{
 width: 300px;
 display: inline-block;
+/* margin: 5px auto !important;
+row-gap: 5px; */
 }
 
 ion-content.ion-content-background {
@@ -54,6 +56,7 @@ ion-content.ion-content-background {
 }
 
 @media (max-width: 600px) {
+
   ion-card{
   width: 300px;
   display: flex;

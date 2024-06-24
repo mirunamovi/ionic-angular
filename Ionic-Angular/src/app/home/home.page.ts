@@ -16,17 +16,18 @@ import { Router } from '@angular/router';
 })
 export class HomePage extends NetworkAwareHandler {
   errorMessage: string = '';
-
+  status?: any;
   protected override onNetworkStatusChange(status: ConnectionStatus) {
     if (status === ConnectionStatus.Offline) {
+      this.status = 'offline';
       this.handleOfflineStatus();
     } else {
+      this.status = 'online';;
       this.handleOnlineStatus();
     }
   }
 
   private handleOfflineStatus() {
-    // Handle offline status
     console.log('Network is offline. Taking appropriate actions.');
     // Add your logic here
   }

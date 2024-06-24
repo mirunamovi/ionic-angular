@@ -11,10 +11,10 @@ import { ThumbnailService } from '../thumbnail-viewer/thumbnail.service';
 })
 export class ActivityListComponent implements OnInit {
 
-  activities?: Track[];
+  activities: Track[] = [];
 
 
-  constructor(private activityListService: ActivityListService, private router: Router, private thumbnailService: ThumbnailService) { }
+  constructor(private activityListService: ActivityListService, private router: Router) { }
 
  async ngOnInit() {
     console.log("ngOnInit in activity list is called");

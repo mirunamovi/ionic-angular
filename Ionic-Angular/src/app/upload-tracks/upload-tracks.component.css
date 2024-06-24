@@ -40,9 +40,9 @@ ion-content.ion-content-background {
 }
 
 .ion-app-logo {
-  width: 100px;
-  height: 100px;
-  margin: 20px 0; /* Adjust margin */
+  width: 150px;
+  height: 75px;
+  margin: 20px 10px 0 0; /* Adjust margin */
 }
 
 .heading {
@@ -148,8 +148,10 @@ form {
     height: 45px;
   }
   .ion-app-logo {
-    width: 80px; /* Adjust avatar size */
+    width: 100px; /* Adjust avatar size */
     margin: 10px 0; /* Adjust margin */
+    height: 50px;
+
   }
   .heading {
     margin: 10px 0; /* Adjust margin */
